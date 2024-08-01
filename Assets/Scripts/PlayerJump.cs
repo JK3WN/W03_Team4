@@ -93,6 +93,8 @@ public class PlayerJump : MonoBehaviour
     /// ===========================================
     /// </para>
     /// 플레이어 하강 시 중력에 배수를 곱해주는 메서드
+    /// 하강 시 'fallMultiplier'를 배수로 중력을 조절.
+    /// 상승 시 'lowJumpMultiplier'를 배수로 중력을 조절.
     /// </summary>
     private void MultiplyOnPlayerFall()
     {
@@ -113,7 +115,7 @@ public class PlayerJump : MonoBehaviour
     /// <para>
     /// ===========================================
     /// </para>
-    /// input system에서 jump event invoke 시 호출 함수
+    /// input system에서 'Jump' event invoke 시 호출 함수
     /// </summary>
     public void OnJumpPerformed(InputAction.CallbackContext context)
     {
