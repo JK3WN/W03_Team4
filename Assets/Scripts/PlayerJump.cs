@@ -64,7 +64,7 @@ public class PlayerJump : MonoBehaviour
     void FixedUpdate()
     {
         MultiplyOnPlayerFall();
-        // Debug.Log(rb.velocity);
+        Debug.Log(rb.velocity);
     }
 
     /// <summary>
@@ -104,6 +104,7 @@ public class PlayerJump : MonoBehaviour
         if (context.performed && playerCollision.OnGround)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            rb.velocity += transform.parent.GetComponent<Rigidbody2D>().velocity;
         }
 
         if (context.canceled && rb.velocity.y > 0f)
