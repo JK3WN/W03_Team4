@@ -52,6 +52,8 @@ public class PlayerCollision : MonoBehaviour
 
     private Color debugCollsiionColor = Color.green;
 
+    private Collider2D collider;
+
     #endregion
 
     #region 외부 참조
@@ -72,7 +74,7 @@ public class PlayerCollision : MonoBehaviour
     {
         CheckCollision();
 
-        Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
+        //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
     }
 
     void OnDrawGizmos()
@@ -103,7 +105,7 @@ public class PlayerCollision : MonoBehaviour
         onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, wallLayer);
         onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, wallLayer);
 
-        // 벽 충돌 확인
+        
         onWall = onRightWall || onLeftWall;
     }
 }
