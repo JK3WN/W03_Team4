@@ -23,11 +23,6 @@ public class PlayerJump : MonoBehaviour
 
     [Space]
 
-    [Header("Boolean")]
-    public bool isGrounded = false;
-
-    [Space]
-
     [Header("Jump Stats")]
     [Range(0.5f, 50.0f)]
     [SerializeField] private float jumpPower;
@@ -54,19 +49,6 @@ public class PlayerJump : MonoBehaviour
     void OnDestroy()
     {
         jumpAction.performed -= OnJumpPerformed;
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-            isGrounded = true;
-
-    }
-
-    void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-            isGrounded = false;
     }
 
     void OnEnable()
@@ -119,7 +101,7 @@ public class PlayerJump : MonoBehaviour
     /// </summary>
     public void OnJumpPerformed(InputAction.CallbackContext context)
     {
-        if (context.performed && isGrounded)
+        if (context.performed && playerCollision.OnGround)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
