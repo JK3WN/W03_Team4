@@ -51,6 +51,7 @@ public class PlayerCollision : MonoBehaviour
     #region 로컬 변수 선언
 
     private Color debugCollsiionColor = Color.green;
+    private GameObject GroundObject;
 
     #endregion
 
@@ -72,7 +73,18 @@ public class PlayerCollision : MonoBehaviour
     {
         CheckCollision();
 
-        Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
+
+        // YJK, 땅에 붙어있으면 땅 오브젝트를 GroundObject로
+        if (onGround)
+        {
+            GroundObject = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer).gameObject;
+        }
+        else
+        {
+            GroundObject = null;
+        }
+
+        //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
     }
 
     void OnDrawGizmos()
