@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovePlatform : MonoBehaviour
+public class PlatformHP : MonoBehaviour
 {
-    [Header("Movement")]
-    public Vector2 MoveSpeed;
-
     [Header("Stats")] public float MaxHP;
     private float HP;
 
@@ -19,7 +16,9 @@ public class MovePlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 NewPosition = new Vector2(transform.position.x, transform.position.y) + MoveSpeed * Time.deltaTime;
-        transform.position = NewPosition;
+        if (HP <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
