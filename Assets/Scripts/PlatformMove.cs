@@ -29,7 +29,6 @@ public class PlatformMove : MonoBehaviour
         foreach(Transform child in transform)
         {
             child.transform.GetComponent<Rigidbody2D>().velocity += rb.velocity;
-            Debug.Log(child.transform.GetComponent<Rigidbody2D>().velocity);
         }
 
         //YJK, HP가 0 이하가 되면 이 플랫폼 삭제
