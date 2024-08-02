@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemList
+{
+    None = 0,
+    Fly = 1
+}
+
 public class PlatformMove : MonoBehaviour
 {
     [Header("Movement")]
@@ -10,6 +16,7 @@ public class PlatformMove : MonoBehaviour
 
     [Header("Stats")] public float MaxHP = 100f;
     private float HP;
+    public ItemList Item;
 
     private Rigidbody2D rb;
 
@@ -46,7 +53,7 @@ public class PlatformMove : MonoBehaviour
         //YJK, 오브젝트 삭제될 때 플레이어가 자식으로 있으면 내쫓고 삭제됨
         foreach(Transform child in transform)
         {
-            child.transform.parent = null;
+            if(child.gameObject.CompareTag("Player")) child.transform.parent = null;
         }
         Destroy(this.gameObject);
     }
