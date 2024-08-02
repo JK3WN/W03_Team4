@@ -28,7 +28,7 @@ public class HorizontalMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        nextVec = new Vector2(inputVec.x * speed, rigid.velocity.y);
+        //nextVec = new Vector2(inputVec.x * speed, rigid.velocity.y);
         //rigid.MovePosition((rigid.position + nextVec));
 
         //rigid.velocity = nextVec;
@@ -40,6 +40,11 @@ public class HorizontalMove : MonoBehaviour
             rigid.velocity += new Vector2(transform.parent.gameObject.GetComponent<Rigidbody2D>().velocity.x, 0);
         }
         */
+    }
+
+    public Vector2 GetMoveVector()
+    {
+        return new Vector2(inputVec.x * speed, rigid.velocity.y);
     }
 
     /// <summary>
@@ -55,7 +60,6 @@ public class HorizontalMove : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         inputVec = context.ReadValue<Vector2>();
-        //inputVec = value.Get<Vector2>();
     }
 
 

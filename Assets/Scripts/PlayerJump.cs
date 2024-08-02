@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -35,6 +36,8 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private float fallMultiplier = 2.5f;
     [Range(0.01f, 10.0f)]
     [SerializeField] private float lowJumpMultiplier = 2f;
+
+    [SerializeField] private Vector2 gravityVector;
 
     [Space]
     public Vector2 jumpVector;
@@ -74,12 +77,20 @@ public class PlayerJump : MonoBehaviour
         {
             //rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
             //jumpVector += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            gravityVector = Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }
         else if (rb.velocity.y > 0)
         {
             //rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             //jumpVector += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+            gravityVector = Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
+    }
+
+    public Vector2 GetGravityVector()
+    {
+        MultiplyOnPlayerFall();
+        return gravityVector;
     }
 
     /// <summary>
@@ -114,5 +125,10 @@ public class PlayerJump : MonoBehaviour
             //rb.velocity = new Vector2(rb.velocity.x, 0);
             jumpVector = new Vector2(rb.velocity.x, 0);
         }
+    }
+
+    public Vector2 GetJumpVector()
+    {
+        return jumpVector;
     }
 }

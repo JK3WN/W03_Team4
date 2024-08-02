@@ -52,17 +52,12 @@ public class PlayerWallClimb : MonoBehaviour
         if (horizontalMove == null)
             horizontalMove = GetComponent<HorizontalMove>();
     }
-
-    void FixedUpdate()
+    
+    public Vector2 GetWallVector()
     {
         wallVector = Vector2.zero;
-        if (isWallClimbing)
-            WallClimbing();
-    }
-
-    void Update()
-    {
-        
+        WallClimbing();
+        return wallVector;
     }
 
     private void WallClimbing()
