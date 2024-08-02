@@ -5,7 +5,13 @@ using UnityEngine;
 public enum ItemList
 {
     None = 0,
-    Fly = 1
+    Fly = 1,
+    Dash = 2,
+    Range = 3,
+    AttackSpeed = 4,
+    Damage = 5,
+    MovementSpeed = 6,
+    Resurrection = 7
 }
 
 public class PlatformMove : MonoBehaviour
@@ -17,6 +23,7 @@ public class PlatformMove : MonoBehaviour
     [Header("Stats")] public float MaxHP = 100f;
     private float HP;
     public ItemList Item;
+    public GameObject[] IconList;
 
     private Rigidbody2D rb;
 
@@ -33,6 +40,13 @@ public class PlatformMove : MonoBehaviour
         if (MoveSpeed.x < 0) Direction = EnterDirection.West;
         if (MoveSpeed.y > 0) Direction = EnterDirection.North;
         if (MoveSpeed.y < 0) Direction = EnterDirection.South;
+
+        //YJK, Item 따라 보여줄 아이콘 변경
+        if((int)Item != 0)
+        {
+            IconList[(int)Item - 1].SetActive(true);
+            IconList[(int)Item - 1].gameObject.transform.localScale = new Vector3(1 / transform.localScale.x, 1 / transform.localScale.y, 1);
+        }
     }
 
     // Update is called once per frame
