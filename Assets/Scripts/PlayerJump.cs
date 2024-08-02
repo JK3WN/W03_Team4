@@ -5,20 +5,20 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// <para>
-/// ÀÛ¼ºÀÚ : Á¶¿ì¼®
+/// ì‘ì„±ì : ì¡°ìš°ì„
 /// </para>
 /// <para>
 /// ===========================================
 /// </para>
-/// ÇÃ·¹ÀÌ¾î Á¡ÇÁ Ã³¸® ¹× Áß·Â Ã³¸® Å¬·¡½º
+/// í”Œë ˆì´ì–´ ì í”„ ì²˜ë¦¬ ë° ì¤‘ë ¥ ì²˜ë¦¬ í´ë˜ìŠ¤
 /// </summary>
 public class PlayerJump : MonoBehaviour
 {
-    #region ÀÎ½ºÅØÅÍ º¯¼ö ¼±¾ğ
+    #region ì¸ìŠ¤í…í„° ë³€ìˆ˜ ì„ ì–¸
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private PlayerCollision playerCollision;
-    // ÇÃ·¹ÀÌ¾î º£ÀÌ½º Å¬·¡½º Ãß°¡ ½Ã ¼öÁ¤ ÇÊ¿ä
+    // í”Œë ˆì´ì–´ ë² ì´ìŠ¤ í´ë˜ìŠ¤ ì¶”ê°€ ì‹œ ìˆ˜ì • í•„ìš”
     [SerializeField] private PlayerWallClimb playerWallClimb;
 
     [Space]
@@ -55,14 +55,14 @@ public class PlayerJump : MonoBehaviour
 
     /// <summary>
     /// <para>
-    /// ÀÛ¼ºÀÚ : Á¶¿ì¼®
+    /// ì‘ì„±ì : ì¡°ìš°ì„
     /// </para>
     /// <para>
     /// ===========================================
     /// </para>
-    /// ÇÃ·¹ÀÌ¾î ÇÏ°­ ½Ã Áß·Â¿¡ ¹è¼ö¸¦ °öÇØÁÖ´Â ¸Ş¼­µå
-    /// ÇÏ°­ ½Ã 'fallMultiplier'¸¦ ¹è¼ö·Î Áß·ÂÀ» Á¶Àı.
-    /// »ó½Â ½Ã 'lowJumpMultiplier'¸¦ ¹è¼ö·Î Áß·ÂÀ» Á¶Àı.
+    /// í”Œë ˆì´ì–´ í•˜ê°• ì‹œ ì¤‘ë ¥ì— ë°°ìˆ˜ë¥¼ ê³±í•´ì£¼ëŠ” ë©”ì„œë“œ
+    /// í•˜ê°• ì‹œ 'fallMultiplier'ë¥¼ ë°°ìˆ˜ë¡œ ì¤‘ë ¥ì„ ì¡°ì ˆ.
+    /// ìƒìŠ¹ ì‹œ 'lowJumpMultiplier'ë¥¼ ë°°ìˆ˜ë¡œ ì¤‘ë ¥ì„ ì¡°ì ˆ.
     /// </summary>
     private void MultiplyOnPlayerFall()
     {
@@ -78,14 +78,14 @@ public class PlayerJump : MonoBehaviour
 
     /// <summary>
     /// <para>
-    /// ÀÛ¼ºÀÚ : Á¶¿ì¼®
+    /// ì‘ì„±ì : ì¡°ìš°ì„
     /// </para>
     /// <para>
     /// ===========================================
     /// </para>
-    /// input system¿¡¼­ 'Jump' event invoke ½Ã È£Ãâ ÇÔ¼ö
-    /// Á¡ÇÁ Å°¸¦ ´©¸£°í ¶¥¿¡ ºÙ¾îÀÖ´Â »óÅÂÀÏ ¶§, ÇÃ·¹ÀÌ¾î´Â jumpPower¸¸Å­ Á¡ÇÁ
-    /// Á¡ÇÁ Å°¸¦ ¶¼°í ÇÃ·¹ÀÌ¾î°¡ »ó½Â ÁßÀÏ ¶§, ÇÃ·¹ÀÌ¾îÀÇ y ¼Ó·ÂÀ» 0À¸·Î ¸¸µê.
+    /// input systemì—ì„œ 'Jump' event invoke ì‹œ í˜¸ì¶œ í•¨ìˆ˜
+    /// ì í”„ í‚¤ë¥¼ ëˆ„ë¥´ê³  ë•…ì— ë¶™ì–´ìˆëŠ” ìƒíƒœì¼ ë•Œ, í”Œë ˆì´ì–´ëŠ” jumpPowerë§Œí¼ ì í”„
+    /// ì í”„ í‚¤ë¥¼ ë–¼ê³  í”Œë ˆì´ì–´ê°€ ìƒìŠ¹ ì¤‘ì¼ ë•Œ, í”Œë ˆì´ì–´ì˜ y ì†ë ¥ì„ 0ìœ¼ë¡œ ë§Œë“¦.
     /// </summary>
     public void OnJump(InputAction.CallbackContext context)
     {

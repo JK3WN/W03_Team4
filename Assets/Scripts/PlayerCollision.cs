@@ -73,7 +73,7 @@ public class PlayerCollision : MonoBehaviour
         CheckCollision();
 
 
-        // YJK, 땅에 붙어있으면 땅 오브젝트를 GroundObject 및 부모로
+        // YJK, 땅에 붙어있으면 땅 오브젝트를 부모로
         if (onGround)
         {
             transform.parent = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer).gameObject.transform;

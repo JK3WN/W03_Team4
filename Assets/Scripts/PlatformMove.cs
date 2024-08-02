@@ -2,13 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemList
+{
+    None = 0,
+    Fly = 1
+}
+
 public class PlatformMove : MonoBehaviour
 {
     [Header("Movement")]
     public Vector2 MoveSpeed;
+    public EnterDirection Direction;
 
     [Header("Stats")] public float MaxHP = 100f;
     private float HP;
+    public ItemList Item;
 
     private Rigidbody2D rb;
 
@@ -19,6 +27,12 @@ public class PlatformMove : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if (MoveSpeed.x == 0) rb.constraints = RigidbodyConstraints2D.FreezePositionX;
         if (MoveSpeed.y == 0) rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+
+        //YJK, Direction enum을 MoveSpeed에 따라 자동으로 변경
+        if (MoveSpeed.x > 0) Direction = EnterDirection.East;
+        if (MoveSpeed.x < 0) Direction = EnterDirection.West;
+        if (MoveSpeed.y > 0) Direction = EnterDirection.North;
+        if (MoveSpeed.y < 0) Direction = EnterDirection.South;
     }
 
     // Update is called once per frame
@@ -39,7 +53,7 @@ public class PlatformMove : MonoBehaviour
         //YJK, 오브젝트 삭제될 때 플레이어가 자식으로 있으면 내쫓고 삭제됨
         foreach(Transform child in transform)
         {
-            child.transform.parent = null;
+            if(child.gameObject.CompareTag("Player")) child.transform.parent = null;
         }
         Destroy(this.gameObject);
     }
