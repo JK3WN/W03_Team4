@@ -18,15 +18,15 @@ public class PlayerJump : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private PlayerCollision playerCollision;
-    [SerializeField] private InputActionAsset inputActionAsset;
-    private InputAction jumpAction;
+    // 플레이어 베이스 클래스 추가 시 수정 필요
+    [SerializeField] private PlayerWallClimb playerWallClimb;
 
     [Space]
 
     [Header("Jump Stats")]
     [Range(0.5f, 50.0f)]
     [SerializeField] private float jumpPower;
-    [SerializeField] private Vector2 jumpVector;
+    [SerializeField] private Vector2 wallJumpVector;
 
     [Space]
 
@@ -40,31 +40,17 @@ public class PlayerJump : MonoBehaviour
 
     void Awake()
     {
-        InputActionMap actionMap = inputActionAsset.FindActionMap("PlayerMove");
-        jumpAction = actionMap.FindAction("Jump");
-
-        jumpAction.performed += OnJumpPerformed;
-    }
-
-    void OnDestroy()
-    {
-        jumpAction.performed -= OnJumpPerformed;
-    }
-
-    void OnEnable()
-    {
-        jumpAction.Enable();
-    }
-
-    void OnDisable()
-    {
-        jumpAction.Disable();
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
+        if (playerCollision  == null)
+            playerCollision = GetComponent<PlayerCollision>();
+        if (playerWallClimb == null)
+            playerWallClimb = GetComponent<PlayerWallClimb>();
     }
 
     void FixedUpdate()
     {
         MultiplyOnPlayerFall();
-        // Debug.Log(rb.velocity);
     }
 
     /// <summary>
@@ -98,12 +84,21 @@ public class PlayerJump : MonoBehaviour
     /// ===========================================
     /// </para>
     /// input system에서 'Jump' event invoke 시 호출 함수
+    /// 점프 키를 누르고 땅에 붙어있는 상태일 때, 플레이어는 jumpPower만큼 점프
+    /// 점프 키를 떼고 플레이어가 상승 중일 때, 플레이어의 y 속력을 0으로 만듦.
     /// </summary>
-    public void OnJumpPerformed(InputAction.CallbackContext context)
+    public void OnJump(InputAction.CallbackContext context)
     {
         if (context.performed && playerCollision.OnGround)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+        }
+
+        if (context.performed && playerWallClimb.IsWallClimbing)
+        {
+            rb.velocity = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1),
+                wallJumpVector.y);
+            Debug.Log($"Wall Jump: {rb.velocity}");
         }
 
         if (context.canceled && rb.velocity.y > 0f)
