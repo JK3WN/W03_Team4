@@ -26,15 +26,21 @@ public class PlatformMove : MonoBehaviour
     {
         //YJK, 시간에 따라 위치를 MoveSpeed만큼 이동
         rb.velocity = MoveSpeed;
-        foreach(Transform child in transform)
-        {
-            child.transform.GetComponent<Rigidbody2D>().velocity += rb.velocity;
-        }
 
         //YJK, HP가 0 이하가 되면 이 플랫폼 삭제
         if (HP <= 0)
         {
             Destroy(this.gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        //YJK, 오브젝트 삭제될 때 플레이어가 자식으로 있으면 내쫓고 삭제됨
+        foreach(Transform child in transform)
+        {
+            child.transform.parent = null;
+        }
+        Destroy(this.gameObject);
     }
 }

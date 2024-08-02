@@ -82,8 +82,8 @@ public class PlayerCollision : MonoBehaviour
         }
         else
         {
-            GroundObject = null;
-            transform.parent = null;
+            //GroundObject = null;
+            //transform.parent = null;
         }
 
         //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
