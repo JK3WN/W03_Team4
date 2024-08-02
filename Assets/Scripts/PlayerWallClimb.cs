@@ -45,9 +45,9 @@ public class PlayerWallClimb : MonoBehaviour
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
         if (playerCollision == null)
-            playerCollision = new PlayerCollision();
+            playerCollision = GetComponent<PlayerCollision>();
         if (horizontalMove == null)
-            horizontalMove = new HorizontalMove();
+            horizontalMove = GetComponent<HorizontalMove>();
     }
 
     void FixedUpdate()
