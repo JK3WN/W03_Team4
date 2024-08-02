@@ -38,7 +38,6 @@ public class PortalObjects : MonoBehaviour
             Clone.name = collision.gameObject.name;
             foreach(Transform child in Clone.transform)
             {
-                Debug.Log(child.gameObject.name);
                 Destroy(child.gameObject);
             }
         }
