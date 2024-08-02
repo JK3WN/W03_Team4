@@ -5,28 +5,28 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// <para>
-/// ÀÛ¼ºÀÚ : Á¶¿ì¼®
+/// ì‘ì„±ì : ì¡°ìš°ì„
 /// </para>
 /// <para>
 /// ===========================================
 /// </para>
-/// ÇÃ·¹ÀÌ¾î Á¡ÇÁ Ã³¸® ¹× Áß·Â Ã³¸® Å¬·¡½º
+/// í”Œë ˆì´ì–´ ì í”„ ì²˜ë¦¬ ë° ì¤‘ë ¥ ì²˜ë¦¬ í´ë˜ìŠ¤
 /// </summary>
 public class PlayerJump : MonoBehaviour
 {
-    #region ÀÎ½ºÅØÅÍ º¯¼ö ¼±¾ğ
+    #region ì¸ìŠ¤í…í„° ë³€ìˆ˜ ì„ ì–¸
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private PlayerCollision playerCollision;
-    [SerializeField] private InputActionAsset inputActionAsset;
-    private InputAction jumpAction;
+    // í”Œë ˆì´ì–´ ë² ì´ìŠ¤ í´ë˜ìŠ¤ ì¶”ê°€ ì‹œ ìˆ˜ì • í•„ìš”
+    [SerializeField] private PlayerWallClimb playerWallClimb;
 
     [Space]
 
     [Header("Jump Stats")]
     [Range(0.5f, 50.0f)]
     [SerializeField] private float jumpPower;
-    [SerializeField] private Vector2 jumpVector;
+    [SerializeField] private Vector2 wallJumpVector;
 
     [Space]
 
@@ -40,45 +40,29 @@ public class PlayerJump : MonoBehaviour
 
     void Awake()
     {
-        InputActionMap actionMap = inputActionAsset.FindActionMap("PlayerMove");
-        jumpAction = actionMap.FindAction("Jump");
-
-        jumpAction.performed += OnJumpPerformed;
-
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    void OnDestroy()
-    {
-        jumpAction.performed -= OnJumpPerformed;
-    }
-
-    void OnEnable()
-    {
-        jumpAction.Enable();
-    }
-
-    void OnDisable()
-    {
-        jumpAction.Disable();
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
+        if (playerCollision  == null)
+            playerCollision = GetComponent<PlayerCollision>();
+        if (playerWallClimb == null)
+            playerWallClimb = GetComponent<PlayerWallClimb>();
     }
 
     void FixedUpdate()
     {
         MultiplyOnPlayerFall();
-        // Debug.Log(rb.velocity);
     }
 
     /// <summary>
     /// <para>
-    /// ÀÛ¼ºÀÚ : Á¶¿ì¼®
+    /// ì‘ì„±ì : ì¡°ìš°ì„
     /// </para>
     /// <para>
     /// ===========================================
     /// </para>
-    /// ÇÃ·¹ÀÌ¾î ÇÏ°­ ½Ã Áß·Â¿¡ ¹è¼ö¸¦ °öÇØÁÖ´Â ¸Ş¼­µå
-    /// ÇÏ°­ ½Ã 'fallMultiplier'¸¦ ¹è¼ö·Î Áß·ÂÀ» Á¶Àı.
-    /// »ó½Â ½Ã 'lowJumpMultiplier'¸¦ ¹è¼ö·Î Áß·ÂÀ» Á¶Àı.
+    /// í”Œë ˆì´ì–´ í•˜ê°• ì‹œ ì¤‘ë ¥ì— ë°°ìˆ˜ë¥¼ ê³±í•´ì£¼ëŠ” ë©”ì„œë“œ
+    /// í•˜ê°• ì‹œ 'fallMultiplier'ë¥¼ ë°°ìˆ˜ë¡œ ì¤‘ë ¥ì„ ì¡°ì ˆ.
+    /// ìƒìŠ¹ ì‹œ 'lowJumpMultiplier'ë¥¼ ë°°ìˆ˜ë¡œ ì¤‘ë ¥ì„ ì¡°ì ˆ.
     /// </summary>
     private void MultiplyOnPlayerFall()
     {
@@ -94,18 +78,27 @@ public class PlayerJump : MonoBehaviour
 
     /// <summary>
     /// <para>
-    /// ÀÛ¼ºÀÚ : Á¶¿ì¼®
+    /// ì‘ì„±ì : ì¡°ìš°ì„
     /// </para>
     /// <para>
     /// ===========================================
     /// </para>
-    /// input system¿¡¼­ 'Jump' event invoke ½Ã È£Ãâ ÇÔ¼ö
+    /// input systemì—ì„œ 'Jump' event invoke ì‹œ í˜¸ì¶œ í•¨ìˆ˜
+    /// ì í”„ í‚¤ë¥¼ ëˆ„ë¥´ê³  ë•…ì— ë¶™ì–´ìˆëŠ” ìƒíƒœì¼ ë•Œ, í”Œë ˆì´ì–´ëŠ” jumpPowerë§Œí¼ ì í”„
+    /// ì í”„ í‚¤ë¥¼ ë–¼ê³  í”Œë ˆì´ì–´ê°€ ìƒìŠ¹ ì¤‘ì¼ ë•Œ, í”Œë ˆì´ì–´ì˜ y ì†ë ¥ì„ 0ìœ¼ë¡œ ë§Œë“¦.
     /// </summary>
-    public void OnJumpPerformed(InputAction.CallbackContext context)
+    public void OnJump(InputAction.CallbackContext context)
     {
         if (context.performed && playerCollision.OnGround)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+        }
+
+        if (context.performed && playerWallClimb.IsWallClimbing)
+        {
+            rb.velocity = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1),
+                wallJumpVector.y);
+            Debug.Log($"Wall Jump: {rb.velocity}");
         }
 
         if (context.canceled && rb.velocity.y > 0f)
