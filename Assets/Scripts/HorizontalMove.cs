@@ -16,7 +16,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class HorizontalMove : MonoBehaviour
 {
-    public Vector2 inputVec;
+    public Vector2 inputVec, nextVec;
     public float speed;
 
     Rigidbody2D rigid;
@@ -28,16 +28,18 @@ public class HorizontalMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 nextVec = new Vector2(inputVec.x * speed, rigid.velocity.y);
+        nextVec = new Vector2(inputVec.x * speed, rigid.velocity.y);
         //rigid.MovePosition((rigid.position + nextVec));
 
-        rigid.velocity = nextVec;
+        //rigid.velocity = nextVec;
 
         // YJK, 부모(땅 오브젝트)의 velocity를 플레이어에 추가
+        /*
         if(transform.parent != null)
         {
             rigid.velocity += new Vector2(transform.parent.gameObject.GetComponent<Rigidbody2D>().velocity.x, 0);
         }
+        */
     }
 
     /// <summary>

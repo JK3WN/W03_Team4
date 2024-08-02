@@ -36,6 +36,9 @@ public class PlayerJump : MonoBehaviour
     [Range(0.01f, 10.0f)]
     [SerializeField] private float lowJumpMultiplier = 2f;
 
+    [Space]
+    public Vector2 jumpVector;
+
     #endregion
 
     void Awake()
@@ -50,6 +53,7 @@ public class PlayerJump : MonoBehaviour
 
     void FixedUpdate()
     {
+        jumpVector = Vector2.zero;
         MultiplyOnPlayerFall();
     }
 
@@ -68,11 +72,13 @@ public class PlayerJump : MonoBehaviour
     {
         if (rb.velocity.y < 0)
         {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            //rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            //jumpVector += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }
         else if (rb.velocity.y > 0)
         {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+            //rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+            //jumpVector += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
     }
 
@@ -91,19 +97,22 @@ public class PlayerJump : MonoBehaviour
     {
         if (context.performed && playerCollision.OnGround)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            //rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpVector = new Vector2(rb.velocity.x, jumpPower);
+            Debug.Log($"{jumpVector}");
         }
 
         if (context.performed && playerWallClimb.IsWallClimbing)
         {
-            rb.velocity = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1),
-                wallJumpVector.y);
+            //rb.velocity = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpVector.y);
+            //jumpVector = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpVector.y);
             Debug.Log($"Wall Jump: {rb.velocity}");
         }
 
         if (context.canceled && rb.velocity.y > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 0);
+            //rb.velocity = new Vector2(rb.velocity.x, 0);
+            jumpVector = new Vector2(rb.velocity.x, 0);
         }
     }
 }
