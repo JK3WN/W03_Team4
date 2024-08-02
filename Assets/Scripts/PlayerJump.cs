@@ -42,6 +42,8 @@ public class PlayerJump : MonoBehaviour
     [Space]
     public Vector2 jumpVector;
 
+    private bool isJumping = false;
+
     #endregion
 
     void Awake()
@@ -56,6 +58,11 @@ public class PlayerJump : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isJumping)
+        {
+            isJumping = false;
+            return;
+        }
         jumpVector = Vector2.zero;
         MultiplyOnPlayerFall();
     }
@@ -109,8 +116,9 @@ public class PlayerJump : MonoBehaviour
         if (context.performed && playerCollision.OnGround)
         {
             //rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-            jumpVector = new Vector2(rb.velocity.x, jumpPower);
+            jumpVector = new Vector2(0, jumpPower);
             Debug.Log($"{jumpVector}");
+            isJumping = true;
         }
 
         if (context.performed && playerWallClimb.IsWallClimbing)
@@ -123,7 +131,8 @@ public class PlayerJump : MonoBehaviour
         if (context.canceled && rb.velocity.y > 0f)
         {
             //rb.velocity = new Vector2(rb.velocity.x, 0);
-            jumpVector = new Vector2(rb.velocity.x, 0);
+            jumpVector = new Vector2(0, 0);
+            rb.velocity = new Vector2(rb.velocity.x, 0);
         }
     }
 

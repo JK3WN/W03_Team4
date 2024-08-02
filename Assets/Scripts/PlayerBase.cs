@@ -36,6 +36,10 @@ public class PlayerBase : MonoBehaviour
             FinalVector2 += GetComponent<PlayerJump>().jumpVector;
         rb.velocity = FinalVector2;*/
 
+        if (GetComponent<PlayerCollision>().GroundObject != null)
+        {
+            FinalVector2 += new Vector2(GetComponent<PlayerCollision>().GroundObject.GetComponent<Rigidbody2D>().velocity.x, 0);
+        }
         FinalVector2 += playerJump.GetGravityVector();
         FinalVector2 += horizontalMove.GetMoveVector();
         FinalVector2 += playerJump.GetJumpVector();
