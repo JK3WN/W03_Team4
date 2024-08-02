@@ -58,7 +58,6 @@ public class PlayerJump : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log(jumpVector);
         if (isJumping)
         {
             isJumping = false;
@@ -118,7 +117,7 @@ public class PlayerJump : MonoBehaviour
         {
             //rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             jumpVector = new Vector2(0, jumpPower);
-            //Debug.Log($"{jumpVector}");
+            Debug.Log($"{jumpVector}");
             isJumping = true;
         }
 
