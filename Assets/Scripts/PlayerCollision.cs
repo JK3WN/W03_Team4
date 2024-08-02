@@ -46,6 +46,7 @@ public class PlayerCollision : MonoBehaviour
     public Vector2 bottomOffset, rightOffset, leftOffset;
 
     [Space]
+    public GameObject GroundObject;
     #endregion
 
     #region 로컬 변수 선언
@@ -73,14 +74,14 @@ public class PlayerCollision : MonoBehaviour
         CheckCollision();
 
 
-        // YJK, 땅에 붙어있으면 땅 오브젝트를 부모로
+        // YJK, 땅에 붙어있으면 땅 오브젝트를 GroundObject로
         if (onGround)
         {
-            transform.parent = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer).gameObject.transform;
+            GroundObject = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer).gameObject;
         }
         else
         {
-            transform.parent = null;
+            GroundObject = null;
         }
 
         //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");

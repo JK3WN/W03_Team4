@@ -31,6 +31,9 @@ public class PlayerWallClimb : MonoBehaviour
     [Range(0.001f, 50f)]
     [SerializeField] private float wallSlowFallValue;
 
+    [Space]
+    public Vector2 wallVector;
+
     #endregion
 
     #region 외부 참조
@@ -52,6 +55,7 @@ public class PlayerWallClimb : MonoBehaviour
 
     void FixedUpdate()
     {
+        wallVector = Vector2.zero;
         if (isWallClimbing)
             WallClimbing();
     }
@@ -63,6 +67,7 @@ public class PlayerWallClimb : MonoBehaviour
 
     private void WallClimbing()
     {
-        rb.velocity = new Vector2(rb.velocity.x, -wallSlowFallValue);
+        //rb.velocity = new Vector2(rb.velocity.x, -wallSlowFallValue);
+        wallVector = new Vector2(rb.velocity.x, -wallSlowFallValue);
     }
 }
