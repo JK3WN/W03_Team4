@@ -44,6 +44,8 @@ public class PlayerJump : MonoBehaviour
         jumpAction = actionMap.FindAction("Jump");
 
         jumpAction.performed += OnJumpPerformed;
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void OnDestroy()

@@ -6,6 +6,7 @@ public class PlatformMove : MonoBehaviour
 {
     [Header("Movement")]
     public Vector2 MoveSpeed;
+    public EnterDirection Direction;
 
     [Header("Stats")] public float MaxHP = 100f;
     private float HP;
@@ -19,6 +20,12 @@ public class PlatformMove : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if (MoveSpeed.x == 0) rb.constraints = RigidbodyConstraints2D.FreezePositionX;
         if (MoveSpeed.y == 0) rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+
+        //YJK, Direction enum을 MoveSpeed에 따라 자동으로 변경
+        if (MoveSpeed.x > 0) Direction = EnterDirection.East;
+        if (MoveSpeed.x < 0) Direction = EnterDirection.West;
+        if (MoveSpeed.y > 0) Direction = EnterDirection.North;
+        if (MoveSpeed.y < 0) Direction = EnterDirection.South;
     }
 
     // Update is called once per frame
