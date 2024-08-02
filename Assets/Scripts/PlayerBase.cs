@@ -11,6 +11,8 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private PlayerJump playerJump;
     [SerializeField] private PlayerWallClimb playerWallClimb;
 
+    private float _wallJumpLerpValue = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,28 +23,32 @@ public class PlayerBase : MonoBehaviour
     void FixedUpdate()
     {
         FinalVector2 = Vector2.zero;
-        /*if (GetComponent<PlayerWallClimb>().IsWallClimbing)
+        
+        if (playerWallClimb.IsWallClimbing)
         {
-            FinalVector2 += GetComponent<PlayerWallClimb>().wallVector;
-            // TODO: Wall Velocity
+            FinalVector2 += playerWallClimb.GetWallVector();
+            FinalVector2 += playerJump.GetJumpVector();
         }
         else
         {
-            FinalVector2 += GetComponent<HorizontalMove>().nextVec;
             if (GetComponent<PlayerCollision>().GroundObject != null)
             {
                 FinalVector2 += new Vector2(GetComponent<PlayerCollision>().GroundObject.GetComponent<Rigidbody2D>().velocity.x, 0);
             }
-            FinalVector2 += GetComponent<PlayerJump>().jumpVector;
-        rb.velocity = FinalVector2;*/
 
-        if (GetComponent<PlayerCollision>().GroundObject != null)
-        {
-            FinalVector2 += new Vector2(GetComponent<PlayerCollision>().GroundObject.GetComponent<Rigidbody2D>().velocity.x, 0);
+            if (playerJump.HasWallJumped)
+            {
+                _wallJumpLerpValue = horizontalMove.GetLerpMoveValue(_wallJumpLerpValue);
+                Debug.Log(_wallJumpLerpValue);
+                playerJump.SetHasWallJumped(horizontalMove.CheckEndLerp(_wallJumpLerpValue));
+                FinalVector2 += horizontalMove.GetLerpMoveVector(_wallJumpLerpValue);
+            }
+            else
+                FinalVector2 += horizontalMove.GetMoveVector();
+
+            FinalVector2 += playerJump.GetGravityVector();
+            FinalVector2 += playerJump.GetJumpVector();
         }
-        FinalVector2 += playerJump.GetGravityVector();
-        FinalVector2 += horizontalMove.GetMoveVector();
-        FinalVector2 += playerJump.GetJumpVector();
 
         rb.velocity = FinalVector2;
     }

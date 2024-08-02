@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -40,9 +41,24 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private Vector2 gravityVector;
 
     [Space]
-    public Vector2 jumpVector;
+    [SerializeField] private Vector2 jumpVector;
 
     private bool isJumping = false;
+    [SerializeField] private bool hasWallJumped = false;
+
+    #endregion
+
+    #region 외부 참조
+
+    public bool HasWallJumped
+    {
+        get { return hasWallJumped; }
+    }
+
+    public Vector2 WallJumpVector
+    {
+        get { return wallJumpVector; }
+    }
 
     #endregion
 
@@ -100,6 +116,12 @@ public class PlayerJump : MonoBehaviour
         return gravityVector;
     }
 
+    public void SetHasWallJumped(bool _hasWalJumped)
+    {
+        Debug.Log(_hasWalJumped);
+        hasWallJumped = _hasWalJumped;
+    }
+
     /// <summary>
     /// <para>
     /// 작성자 : 조우석
@@ -115,22 +137,19 @@ public class PlayerJump : MonoBehaviour
     {
         if (context.performed && playerCollision.OnGround)
         {
-            //rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             jumpVector = new Vector2(0, jumpPower);
-            Debug.Log($"{jumpVector}");
             isJumping = true;
         }
 
         if (context.performed && playerWallClimb.IsWallClimbing)
         {
-            //rb.velocity = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpVector.y);
-            //jumpVector = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpVector.y);
-            Debug.Log($"Wall Jump: {rb.velocity}");
+            jumpVector = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpVector.y);
+            isJumping = true;
+            hasWallJumped = true;
         }
 
         if (context.canceled && rb.velocity.y > 0f)
         {
-            //rb.velocity = new Vector2(rb.velocity.x, 0);
             jumpVector = new Vector2(0, 0);
             rb.velocity = new Vector2(rb.velocity.x, 0);
         }

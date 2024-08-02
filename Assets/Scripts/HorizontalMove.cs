@@ -19,6 +19,9 @@ public class HorizontalMove : MonoBehaviour
     public Vector2 inputVec, nextVec;
     public float speed;
 
+    [SerializeField] private float lerpFactor;
+    [SerializeField] private float lerpEndCheckValue;
+
     Rigidbody2D rigid;
 
     void Start()
@@ -26,25 +29,28 @@ public class HorizontalMove : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
 
-    void FixedUpdate()
-    {
-        //nextVec = new Vector2(inputVec.x * speed, rigid.velocity.y);
-        //rigid.MovePosition((rigid.position + nextVec));
-
-        //rigid.velocity = nextVec;
-
-        // YJK, 부모(땅 오브젝트)의 velocity를 플레이어에 추가
-        /*
-        if(transform.parent != null)
-        {
-            rigid.velocity += new Vector2(transform.parent.gameObject.GetComponent<Rigidbody2D>().velocity.x, 0);
-        }
-        */
-    }
-
     public Vector2 GetMoveVector()
     {
         return new Vector2(inputVec.x * speed, rigid.velocity.y);
+    }
+
+    public float GetLerpMoveValue(float _lerpValue)
+    {
+        Debug.Log($"{_lerpValue * -inputVec.x} {inputVec.x * speed} {Mathf.Lerp(_lerpValue, inputVec.x * speed, Time.fixedDeltaTime * lerpFactor)}");
+        return Mathf.Lerp(_lerpValue * inputVec.x, inputVec.x * speed, Time.fixedDeltaTime * lerpFactor);
+    }
+
+    public bool CheckEndLerp(float _wallJumpLerpValue)
+    {
+        if (_wallJumpLerpValue - inputVec.x * speed < lerpEndCheckValue)
+            return false;
+        else
+            return true;
+    }
+
+    public Vector2 GetLerpMoveVector(float _lerpValue)
+    {
+        return new Vector2(_lerpValue, rigid.velocity.y);
     }
 
     /// <summary>
@@ -61,12 +67,4 @@ public class HorizontalMove : MonoBehaviour
     {
         inputVec = context.ReadValue<Vector2>();
     }
-
-
-    /*void OnCollisionEnter2D(Collision2D collision)
-    {
-        rigid.velocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
-
-        Debug.Log(rigid.velocity);
-    }*/
 }
