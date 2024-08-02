@@ -42,13 +42,13 @@ public class HorizontalMove : MonoBehaviour
 
     /// <summary>
     /// <para>
-    /// 작성자 : 1. 이승철, 2. 조우석
+    /// 작성자 : 이승철
     /// </para>
     /// <para>
     /// ===========================================
     /// </para>
     /// input system에서 'Move' event invoke 시 호출 함수
-    /// Move 이벤트 호출 시 인풋 액션의 move vector2를 받아와 inputVector에 적용
+    /// CWS, Move 이벤트 호출 시 인풋 액션의 move vector2를 받아와 inputVector에 적용
     /// </summary>
     public void OnMove(InputAction.CallbackContext context)
     {
