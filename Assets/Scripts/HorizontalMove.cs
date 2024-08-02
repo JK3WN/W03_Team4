@@ -32,6 +32,12 @@ public class HorizontalMove : MonoBehaviour
         //rigid.MovePosition((rigid.position + nextVec));
 
         rigid.velocity = nextVec;
+
+        // YJK, 부모(땅 오브젝트)의 velocity를 플레이어에 추가
+        if(transform.parent != null)
+        {
+            rigid.velocity += new Vector2(transform.parent.gameObject.GetComponent<Rigidbody2D>().velocity.x, 0);
+        }
     }
 
     /// <summary>

@@ -52,8 +52,6 @@ public class PlayerCollision : MonoBehaviour
 
     private Color debugCollsiionColor = Color.green;
 
-    private Collider2D collider;
-
     #endregion
 
     #region 외부 참조
@@ -73,6 +71,17 @@ public class PlayerCollision : MonoBehaviour
     private void Update()
     {
         CheckCollision();
+
+
+        // YJK, 땅에 붙어있으면 땅 오브젝트를 GroundObject 및 부모로
+        if (onGround)
+        {
+            transform.parent = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer).gameObject.transform;
+        }
+        else
+        {
+            transform.parent = null;
+        }
 
         //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
     }
