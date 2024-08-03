@@ -14,21 +14,30 @@ public class PlatformMove : MonoBehaviour
     public Vector2 MoveSpeed;
     public EnterDirection Direction;
 
-    [Header("Stats")] public float MaxHP = 100f;
-    private float HP;
+    [Header("Stats")] public int MaxHP = 1;
+    public GameObject[] HPList;
     public ItemList Item;
+    public int Exp = 1;
+
+    [Header("Current Status")]
+    public int HP;
+    public bool isTouched = false;
 
     private Rigidbody2D rb;
+
+    private void Awake()
+    {
+        HP = MaxHP;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        HP = MaxHP;
         rb = GetComponent<Rigidbody2D>();
         if (MoveSpeed.x == 0) rb.constraints = RigidbodyConstraints2D.FreezePositionX;
         if (MoveSpeed.y == 0) rb.constraints = RigidbodyConstraints2D.FreezePositionY;
 
-        //YJK, Direction enum을 MoveSpeed에 따라 자동으로 변경
+        // YJK, Direction enum을 MoveSpeed에 따라 자동으로 변경
         if (MoveSpeed.x > 0) Direction = EnterDirection.East;
         if (MoveSpeed.x < 0) Direction = EnterDirection.West;
         if (MoveSpeed.y > 0) Direction = EnterDirection.North;
@@ -38,23 +47,42 @@ public class PlatformMove : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //YJK, 시간에 따라 위치를 MoveSpeed만큼 이동
+        // YJK, 현 HP 따라 채워져야 하는 HP 원 채움
+        for(int i = 0; i < HP && i < HPList.Length; i++)
+        {
+            HPList[i].SetActive(true);
+        }
+
+        // YJK, 현 HP 따라 비어있는 HP 원 비움
+        for(int i = HP; i < HPList.Length; i++)
+        {
+            HPList[i].SetActive(false);
+        }
+
+        // YJK, isTouched가 참이면 이 스프라이트를 반투명하게 만듦
+        if (isTouched)
+        {
+            Color color = GetComponent<SpriteRenderer>().color;
+            color.a = 0.5f;
+            GetComponent<SpriteRenderer>().color = color;
+        }
+
+        // YJK, 시간에 따라 위치를 MoveSpeed만큼 이동
         rb.velocity = MoveSpeed;
 
-        //YJK, HP가 0 이하가 되면 이 플랫폼 삭제
+        // YJK, HP가 0 이하가 되면 이 플랫폼 삭제
         if (HP <= 0)
         {
             Destroy(this.gameObject);
         }
     }
 
-    private void OnDestroy()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        //YJK, 오브젝트 삭제될 때 플레이어가 자식으로 있으면 내쫓고 삭제됨
-        foreach(Transform child in transform)
+        // YJK, 블록이 플레이어에 닿으면 isTouched 참으로
+        if (collision.gameObject.CompareTag("Player"))
         {
-            if(child.gameObject.CompareTag("Player")) child.transform.parent = null;
+            isTouched = true;
         }
-        Destroy(this.gameObject);
     }
 }
