@@ -36,10 +36,6 @@ public class PortalObjects : MonoBehaviour
         {
             GameObject Clone = GameObject.Instantiate(collision.gameObject, collision.gameObject.transform.position + Exit.transform.position - transform.position, Quaternion.identity);
             Clone.name = collision.gameObject.name;
-            foreach(Transform child in Clone.transform)
-            {
-                Destroy(child.gameObject);
-            }
         }
     }
 
