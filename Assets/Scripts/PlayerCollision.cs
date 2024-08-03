@@ -53,6 +53,8 @@ public class PlayerCollision : MonoBehaviour
 
     private Color debugCollsiionColor = Color.green;
 
+    private int _centerCollisionCount = 0;
+
     #endregion
 
     #region 외부 참조
@@ -114,8 +116,9 @@ public class PlayerCollision : MonoBehaviour
         onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
         onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, wallLayer);
         onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, wallLayer);
-
         
         onWall = onRightWall || onLeftWall;
+
+        _centerCollisionCount = Physics2D.OverlapCircleAll(transform.position, collisionRadius / 2, groundLayer | wallLayer).Length;
     }
 }
