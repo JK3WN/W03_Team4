@@ -687,7 +687,6 @@ MonoBehaviour:
   MoveSpeed: {x: 5, y: 0}
   Direction: 0
   MaxHP: 5
-  HP: 0
   HPList:
   - {fileID: 8434906389249658964}
   - {fileID: 3166384459194589001}
@@ -695,6 +694,11 @@ MonoBehaviour:
   - {fileID: 7428160735956556225}
   - {fileID: 7165815333259158620}
   Item: 0
+  Exp: 1
+  x: 5
+  y: 1
+  HP: 0
+  isTouched: 0
 --- !u!1 &7165815333259158620
 GameObject:
   m_ObjectHideFlags: 0
