@@ -10,31 +10,25 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private PlayerCollision playerCollision;
     [SerializeField] private PlayerJump playerJump;
     [SerializeField] private PlayerWallClimb playerWallClimb;
+    private PlayerDash playerDash;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerDash = GetComponent<PlayerDash>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         FinalVector2 = Vector2.zero;
-        /*if (GetComponent<PlayerWallClimb>().IsWallClimbing)
+
+        if (playerDash.IsDashing)
         {
-            FinalVector2 += GetComponent<PlayerWallClimb>().wallVector;
-            // TODO: Wall Velocity
+            rb.velocity = playerDash.DashVector;
+            return;
         }
-        else
-        {
-            FinalVector2 += GetComponent<HorizontalMove>().nextVec;
-            if (GetComponent<PlayerCollision>().GroundObject != null)
-            {
-                FinalVector2 += new Vector2(GetComponent<PlayerCollision>().GroundObject.GetComponent<Rigidbody2D>().velocity.x, 0);
-            }
-            FinalVector2 += GetComponent<PlayerJump>().jumpVector;
-        rb.velocity = FinalVector2;*/
 
         if (GetComponent<PlayerCollision>().GroundObject != null)
         {
