@@ -260,10 +260,14 @@ MonoBehaviour:
   MoveSpeed: {x: 2, y: 0}
   Direction: 0
   MaxHP: 1
-  HP: 0
   HPList:
   - {fileID: 6112967277292503130}
   Item: 0
+  Exp: 1
+  x: 2
+  y: 1
+  HP: 0
+  isTouched: 0
 --- !u!1 &6112967277292503130
 GameObject:
   m_ObjectHideFlags: 0
