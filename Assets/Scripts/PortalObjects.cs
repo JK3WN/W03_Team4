@@ -36,7 +36,6 @@ public class PortalObjects : MonoBehaviour
         {
             GameObject Clone = GameObject.Instantiate(collision.gameObject, collision.gameObject.transform.position + Exit.transform.position - transform.position, Quaternion.identity);
             Clone.name = collision.gameObject.name;
-            Debug.Log(Clone.GetComponent<PlatformMove>().HP);
             Clone.GetComponent<PlatformMove>().HP = collision.gameObject.GetComponent<PlatformMove>().HP;
         }
     }

@@ -15,9 +15,13 @@ public class PlatformMove : MonoBehaviour
     public EnterDirection Direction;
 
     [Header("Stats")] public int MaxHP = 1;
-    public int HP;
     public GameObject[] HPList;
     public ItemList Item;
+    public int Exp = 1;
+
+    [Header("Current Status")]
+    public int HP;
+    public bool isTouched = false;
 
     private Rigidbody2D rb;
 
@@ -49,10 +53,18 @@ public class PlatformMove : MonoBehaviour
             HPList[i].SetActive(true);
         }
 
-        // YJK, 현 HP 따라 비어있는 HP 원 제거
+        // YJK, 현 HP 따라 비어있는 HP 원 비움
         for(int i = HP; i < HPList.Length; i++)
         {
             HPList[i].SetActive(false);
+        }
+
+        // YJK, isTouched가 참이면 이 스프라이트를 반투명하게 만듦
+        if (isTouched)
+        {
+            Color color = GetComponent<SpriteRenderer>().color;
+            color.a = 0.5f;
+            GetComponent<SpriteRenderer>().color = color;
         }
 
         // YJK, 시간에 따라 위치를 MoveSpeed만큼 이동
@@ -65,15 +77,12 @@ public class PlatformMove : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        // YJK, 오브젝트 삭제될 때 플레이어가 자식으로 있으면 내쫓고 삭제됨
-        /*
-        foreach(Transform child in transform)
+        // YJK, 블록이 플레이어에 닿으면 isTouched 참으로
+        if (collision.gameObject.CompareTag("Player"))
         {
-            if(child.gameObject.CompareTag("Player")) child.transform.parent = null;
+            isTouched = true;
         }
-        Destroy(this.gameObject);
-        */
     }
 }
