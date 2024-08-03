@@ -62,6 +62,15 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shop"",
+                    ""type"": ""Button"",
+                    ""id"": ""34a722c8-4db4-45b0-be26-4ed2ac1354bd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -196,6 +205,28 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a5c5ad1-e3c2-400c-8889-e68c2b709d92"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Shop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50b3e374-a05a-4812-a8a8-02c1029d3f39"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -231,6 +262,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         m_PlayerMove_Jump = m_PlayerMove.FindAction("Jump", throwIfNotFound: true);
         m_PlayerMove_Dash = m_PlayerMove.FindAction("Dash", throwIfNotFound: true);
         m_PlayerMove_Attack = m_PlayerMove.FindAction("Attack", throwIfNotFound: true);
+        m_PlayerMove_Shop = m_PlayerMove.FindAction("Shop", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -296,6 +328,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerMove_Jump;
     private readonly InputAction m_PlayerMove_Dash;
     private readonly InputAction m_PlayerMove_Attack;
+    private readonly InputAction m_PlayerMove_Shop;
     public struct PlayerMoveActions
     {
         private @PlayerControl m_Wrapper;
@@ -304,6 +337,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerMove_Jump;
         public InputAction @Dash => m_Wrapper.m_PlayerMove_Dash;
         public InputAction @Attack => m_Wrapper.m_PlayerMove_Attack;
+        public InputAction @Shop => m_Wrapper.m_PlayerMove_Shop;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMove; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -325,6 +359,9 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
+            @Shop.started += instance.OnShop;
+            @Shop.performed += instance.OnShop;
+            @Shop.canceled += instance.OnShop;
         }
 
         private void UnregisterCallbacks(IPlayerMoveActions instance)
@@ -341,6 +378,9 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
+            @Shop.started -= instance.OnShop;
+            @Shop.performed -= instance.OnShop;
+            @Shop.canceled -= instance.OnShop;
         }
 
         public void RemoveCallbacks(IPlayerMoveActions instance)
@@ -382,5 +422,6 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnShop(InputAction.CallbackContext context);
     }
 }
