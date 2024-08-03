@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Vector2 FinalVector2;
     [SerializeField] private HorizontalMove horizontalMove;
     [SerializeField] private PlayerCollision playerCollision;
     [SerializeField] private PlayerJump playerJump;
     [SerializeField] private PlayerWallClimb playerWallClimb;
-
-    private float _wallJumpLerpValue = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -38,16 +36,15 @@ public class PlayerBase : MonoBehaviour
 
             if (playerJump.HasWallJumped)
             {
-                _wallJumpLerpValue = horizontalMove.GetLerpMoveValue(_wallJumpLerpValue);
-                Debug.Log(_wallJumpLerpValue);
-                playerJump.SetHasWallJumped(horizontalMove.CheckEndLerp(_wallJumpLerpValue));
-                FinalVector2 += horizontalMove.GetLerpMoveVector(_wallJumpLerpValue);
+                FinalVector2 += playerJump.LerpWallJumpVector(horizontalMove.GetMoveVector());
             }
             else
+            {
                 FinalVector2 += horizontalMove.GetMoveVector();
+            }
 
-            FinalVector2 += playerJump.GetGravityVector();
             FinalVector2 += playerJump.GetJumpVector();
+            FinalVector2 += playerJump.GetGravityVector();
         }
 
         rb.velocity = FinalVector2;
