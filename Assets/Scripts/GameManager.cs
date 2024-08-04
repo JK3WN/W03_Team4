@@ -10,13 +10,16 @@ public class GameManager : MonoBehaviour
 
     public GameObject player;
     public GameObject[] DashGauge, DashSlots;
+    public int[] EXPNeeded;
+    public int CurrentExp = 0;
 
-    public TMPro.TextMeshProUGUI timerText;
+    public TMPro.TextMeshProUGUI timerText, expText;
 
     // Start is called before the first frame update
     void Start()
     {
         isPlaying = true;
+        CurrentExp = 0;
         startTime = Time.time;
     }
 
@@ -40,6 +43,17 @@ public class GameManager : MonoBehaviour
             {
                 DashGauge[i].GetComponent<Image>().fillAmount = Mathf.Clamp(player.GetComponent<PlayerDash>().Dashes - (float)i, 0f, 1f);
             }
+
+            // YJK, EXPNeeded 달성할 때마다 EXPNeeded만큼 감소 및 MaxDashes 증가
+            if (player.GetComponent<PlayerDash>().MaxDashes < 5 && CurrentExp >= EXPNeeded[player.GetComponent<PlayerDash>().MaxDashes - 1])
+            {
+                CurrentExp -= EXPNeeded[player.GetComponent<PlayerDash>().MaxDashes - 1];
+                player.GetComponent<PlayerDash>().AddMaxDash();
+            }
+
+            // YJK, EXPText 갱신
+            if(player.GetComponent<PlayerDash>().MaxDashes < 5) expText.text = "EXP: " + CurrentExp + " / " + EXPNeeded[player.GetComponent<PlayerDash>().MaxDashes - 1];
+            else expText.gameObject.SetActive(false);
         }
     }
 }
