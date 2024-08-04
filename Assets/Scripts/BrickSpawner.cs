@@ -113,7 +113,7 @@ public class BrickSpawner : MonoBehaviour
             float randX = Random.Range(0, percents[15 - brickCount]);
             for (int i = 15 - brickCount + 1; i >= 1; i--)
             {
-                if (randX < percents[i+1])
+                if (randX < percents[i])
                 {
                     index = i;
                     break;
@@ -138,7 +138,7 @@ public class BrickSpawner : MonoBehaviour
             float randX = Random.Range(0, percents[24 - brickCount]);
             for (int i = 24 - brickCount + 1; i >= 1; i--)
             {
-                if (randX < percents[i+1])
+                if (randX < percents[i])
                 {
                     index =  i;
                     break;
