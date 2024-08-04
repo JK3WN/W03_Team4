@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
     public static bool isPlaying = true;
     private float startTime;
 
-    public GameObject player;
+    public GameObject player, floor, spikeFloor;
+    public float changeSpeed = 0.1f;
     public GameObject[] DashGauge, DashSlots;
     public int[] EXPNeeded;
     public int CurrentExp = 0;
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
         isPlaying = true;
         CurrentExp = 0;
         startTime = Time.time;
+        StartCoroutine("RiseSpike");
     }
 
     // Update is called once per frame
@@ -52,8 +54,19 @@ public class GameManager : MonoBehaviour
             }
 
             // YJK, EXPText °»½Å
-            if(player.GetComponent<PlayerDash>().MaxDashes < 5) expText.text = "EXP: " + CurrentExp + " / " + EXPNeeded[player.GetComponent<PlayerDash>().MaxDashes - 1];
-            else expText.gameObject.SetActive(false);
+            if (player.GetComponent<PlayerDash>().MaxDashes < 5) expText.text = "EXP: " + CurrentExp + " / " + EXPNeeded[player.GetComponent<PlayerDash>().MaxDashes - 1];
+            else expText.text = "Max Level";
         }
+    }
+
+    IEnumerator RiseSpike()
+    {
+        while (isPlaying && spikeFloor.transform.position.y < -19.5f)
+        {
+            yield return new WaitForSeconds(1f);
+            spikeFloor.transform.position = new Vector3 (spikeFloor.transform.position.x, spikeFloor.transform.position.y + changeSpeed, 0f);
+            floor.transform.position = new Vector3(floor.transform.position.x, floor.transform.position.y - changeSpeed, 0f);
+        }
+        Destroy(floor);
     }
 }

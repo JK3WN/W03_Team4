@@ -34,7 +34,7 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(TimeInterval);
             int direction = brickSpawner.RandomDirection();
             int startPos = -1;
-            GameObject blockType = BrickList[Random.Range(0, BrickList.Length - 1)];
+            GameObject blockType = BrickList[Random.Range(0, BrickList.Length)];
             if(direction < 2)
             {
                 startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().y);
