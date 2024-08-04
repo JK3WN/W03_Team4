@@ -69,6 +69,14 @@ public class PlayerCollision : MonoBehaviour
     // 0 : 벽에 붙지 않음 | 1 : 오른쪽 벽 | 2 : 왼쪽 벽
     public int WallSide { get { return 0 + (onRightWall ? 1 : 0) + (onLeftWall ? 2 : 0); } }
 
+    public bool IsDead
+    {
+        get
+        {
+            return _centerCollisionCount > 1;
+        }
+    }
+
     #endregion
 
     private void Update()
@@ -86,6 +94,8 @@ public class PlayerCollision : MonoBehaviour
             GroundObject = null;
         }
 
+        Debug.Log($"{_centerCollisionCount}");
+
         //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
     }
 
@@ -98,6 +108,7 @@ public class PlayerCollision : MonoBehaviour
         Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
         Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
         Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position, collisionRadius / 2);
     }
 
     /// <summary>

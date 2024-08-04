@@ -6,16 +6,40 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// <para>
+/// 작성자 : 이승철
+/// </para>
+/// <para>
+/// ===========================================
+/// </para>
+/// 블록 균일생성 관련 클래스
+/// </summary>
 public class BrickSpawner : MonoBehaviour
 {
-    public int[] brickX = new int[24];
-    public int[] brickY = new int[15];
+    #region 인스텍터 변수 선언
+    [Header("현재 블록 X, Y")]
+    [SerializeField] int[] brickX = new int[24];
+    [SerializeField] int[] brickY = new int[15];
 
-    public int[] additionalBrickX = new int[24];
-    public int[] additionalBrickY = new int[15];
+    [Header("블록크기만큼 합치는 배열")]
+    [SerializeField] int[] additionalBrickX = new int[24];
+    [SerializeField] int[] additionalBrickY = new int[15];
 
-    public float[] percents = new float[25];
+    [Header("확률 배열")]
+    [SerializeField] float[] percents = new float[25];
+    #endregion
 
+    /// <summary>
+    /// <para>
+    /// 작성자 : 이승철
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 블록 추가시 메소드, 블록 추가를 하고 추가된 상태를 현재 블록 배열에다가 갱신함
+    /// 시작지점(startPos) 배열부터 해서 블록크기만큼 번째 배열까지 크기를 1 더함
+    /// </summary>
     public void AddBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();
@@ -35,6 +59,16 @@ public class BrickSpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// <para>
+    /// 작성자 : 이승철
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 블록 추가시 메소드, 블록 추가를 하고 추가된 상태를 현재 블록 배열에다가 갱신함
+    /// 시작지점(startPos) 배열부터 해서 블록크기만큼 번째 배열까지 크기를 1 뺌
+    /// </summary>
     public void DeleteBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();
@@ -54,9 +88,21 @@ public class BrickSpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// <para>
+    /// 작성자 : 이승철, 임재균
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// X축의 합과 Y축의 합을 구하고 역수를 취한 확률이 그 확률이 되게 하여
+    /// 작은 값일수록 나올 확률이 증가하고 큰 값일수록 나올 확률이 줄어들게 하는 랜덤 방향 메소드
+    /// </summary>
     public int RandomDirection()
     {
+        // 리턴 할 배열
         int index = 0;
+        // X, Y 합
         float sumX = 0;
         float sumY = 0;
         for(int i = 0; i< 15; i++)
@@ -71,17 +117,18 @@ public class BrickSpawner : MonoBehaviour
 
         float randomXY = Random.Range(0, 1/sumX+1/sumY);
         float randomLR = Random.Range(0.0f, 1.0f);
-  
-        // Y���̶��
+        // Y���̶��
         if (randomXY <= 1/sumY)
         {
             index = 0;
         }
         else
         {
+            //X축이면 2
             index = 2;
         }
 
+        // 50%확률로 +1을 하여 위 > 아래/왼 > 오로 되게
         if(randomLR <= 0.5f)
         {
             index++;
@@ -90,6 +137,15 @@ public class BrickSpawner : MonoBehaviour
         return index;
     }
 
+    /// <summary>
+    /// <para>
+    /// 작성자 : 이승철, 임재균
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 블록의 크기가 들어갈 크기만큼 합쳐서 그 값이 크면 나올 확률이 적게, 그 값이 작으면 나올 확률이 크게 값을 지정해주는 메소드
+    /// </summary>
     public int RandomBrickNum(int direction, int brickCount)
     {
         int index = 0;
@@ -97,19 +153,24 @@ public class BrickSpawner : MonoBehaviour
         {
             for (int i = 0; i < 15 - brickCount + 1; i++)
             {
+                // 이전에 값이 남아 있을 수 있으므로 초기값 1로 설정
                 additionalBrickY[i] = 1;
-                for (int j = i; j < i + brickCount; j++)
+                for (int j = i; j < i + brickCount - 1; j++)
                 {
+                    // 블록 크기 만큼 합치기
                     additionalBrickY[i] += brickY[j];
                 }
             }
 
             for (int i = 0; i < 15 - brickCount + 1; i++)
             {
+                // 피보나치 수열처럼 각 확률의 합을 구함
                 percents[i + 1] = percents[i] + (1f / (float)additionalBrickY[i]);
             }
 
+            // 그 확률 크기 값 범위에서 랜덤으로 값을 뽑음
             float randX = Random.Range(0.0f, percents[15 - brickCount + 1]);
+            // 거꾸로 그 값 범위에 있나 점검하며 뽑힌 값 확인하고 그 값으로 설정
             for (int i = 15 - brickCount + 1; i >= 1; i--)
             {
                 if (randX > percents[i])
@@ -124,7 +185,7 @@ public class BrickSpawner : MonoBehaviour
             for (int i = 0; i < 24 - brickCount + 1; i++)
             {
                 additionalBrickX[i] = 1;
-                for (int j = i; j < i + brickCount; j++)
+                for (int j  = i; j < i + brickCount - 1; j++)
                 {
                     additionalBrickX[i] += brickX[j];
                 }
