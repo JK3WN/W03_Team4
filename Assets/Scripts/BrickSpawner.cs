@@ -68,8 +68,6 @@ public class BrickSpawner : MonoBehaviour
         {
             sumX += brickX[i];
         }
-
-        Debug.Log(sumX + "," + sumY);
         float randomXY = Random.Range(0, sumX+sumY);
         float randomLR = Random.Range(0, 1);
 

@@ -19,25 +19,11 @@ public class HorizontalMove : MonoBehaviour
     public Vector2 inputVec, nextVec;
     public float speed;
 
-    [Range(0, 1)] public float deadZone = 0.05f;
-
     Rigidbody2D rigid;
 
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
-    }
-
-    private void FixedUpdate()
-    {
-        if (inputVec.x < deadZone && inputVec.x > -deadZone)
-        {
-            inputVec.x = 0;
-        }
-        if (inputVec.y < deadZone && inputVec.y > -deadZone)
-        {
-            inputVec.y = 0;
-        }
     }
 
     public Vector2 GetMoveVector()
