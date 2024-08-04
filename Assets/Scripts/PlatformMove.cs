@@ -80,9 +80,10 @@ public class PlatformMove : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // YJK, 블록이 플레이어에 닿으면 isTouched 참으로
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && !isTouched)
         {
             isTouched = true;
+            GameObject.Find("GameManager").GetComponent<GameManager>().CurrentExp += Exp;
         }
     }
 }
