@@ -23,7 +23,8 @@ public class PlayerWallClimb : MonoBehaviour
     // 플레이어 베이스 클래스 추가 시 boolean 이동
     private bool isWallClimbing => playerCollision.OnWall 
                                    && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0)
-                                   && !playerCollision.OnGround;
+                                   && !playerCollision.OnGround
+                                   && rb.velocity.y <= 0;
 
     [Space]
 
@@ -55,14 +56,6 @@ public class PlayerWallClimb : MonoBehaviour
     
     public Vector2 GetWallVector()
     {
-        wallVector = Vector2.zero;
-        WallClimbing();
-        return wallVector;
-    }
-
-    private void WallClimbing()
-    {
-        //rb.velocity = new Vector2(rb.velocity.x, -wallSlowFallValue);
-        wallVector = new Vector2(rb.velocity.x, -wallSlowFallValue);
+        return new Vector2(rb.velocity.x, -wallSlowFallValue);
     }
 }
