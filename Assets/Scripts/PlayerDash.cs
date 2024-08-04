@@ -67,6 +67,7 @@ public class PlayerDash : MonoBehaviour
             dashButtonPressed = true;
             inputVector = hm.inputVec;
 
+            // YJK, Dash가 1 이상일 때 Dash 1 줄이고 대쉬 진행
             if (inputVector == Vector2.zero || Dashes < 1f) return;
             Dashes -= 1f;
             StartCoroutine(DoDash(inputVector));
@@ -78,4 +79,9 @@ public class PlayerDash : MonoBehaviour
         }
     }
     
+    // YJK, 대쉬 횟수 증가
+    public void AddMaxDash()
+    {
+        MaxDashes++;
+    }
 }
