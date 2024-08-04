@@ -20,13 +20,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine("Spawn");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    // YJK, TimeInterval¸¶´Ù ÇÑ ºí·Ï¾¿ ½ºÆù
+    // YJK, TimeIntervalë§ˆë‹¤ í•œ ë¸”ë¡ì”© ìŠ¤í°
     IEnumerator Spawn()
     {
         while (GameManager.isPlaying)
@@ -35,6 +29,7 @@ public class SpawnManager : MonoBehaviour
             int direction = brickSpawner.RandomDirection();
             int startPos = -1;
             GameObject blockType = BrickList[Random.Range(0, BrickList.Length)];
+
             if(direction < 2)
             {
                 startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().y);
@@ -43,27 +38,30 @@ public class SpawnManager : MonoBehaviour
             {
                 startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().x);
             }
+
             float speed = blockType.GetComponent<PlatformMove>().MoveSpeed.magnitude;
-            SpawnBrick(direction, startPos, speed, blockType);
+
+            GameObject go = SpawnBrick(direction, startPos, speed, blockType);
+
             brickSpawner.AddBrick(blockType, startPos, direction);
         }
     }
 
-    // YJK, ¿øÇÏ´Â ºí·ÏÀ» ½ºÆù½ÃÅ°´Â ¸í·É
+    // YJK, ì›í•˜ëŠ” ë¸”ë¡ì„ ìŠ¤í°ì‹œí‚¤ëŠ” ëª…ë ¹
     public GameObject SpawnBrick(int direction, int startPos, float speed, GameObject blockType)
     {
-        // ºí·°ÀÇ X³Êºñ, Y³Êºñ
+        // ë¸”ëŸ­ì˜ Xë„ˆë¹„, Yë„ˆë¹„
         float block_X = blockType.GetComponent<PlatformMove>().x;
         float block_Y = blockType.GetComponent<PlatformMove>().y;
 
-        // »ı¼ºµÈ ºí·° ¿ÀºêÁ§Æ® ÀúÀå °ø°£
+        // ìƒì„±ëœ ë¸”ëŸ­ ì˜¤ë¸Œì íŠ¸ ì €ì¥ ê³µê°„
         GameObject brick = null;
         
-        // ºí·° ½ºÆù À§Ä¡ °è»ê
+        // ë¸”ëŸ­ ìŠ¤í° ìœ„ì¹˜ ê³„ì‚°
         float spawnPosX = MirrorList[direction].transform.position.x;
         float spawnPosY = MirrorList[direction].transform.position.y;
 
-        // ¹æÇâ¿¡ µû¶ó ºí·°ÀÇ »ı¼º À§Ä¡ °áÁ¤
+        // ë°©í–¥ì— ë”°ë¼ ë¸”ëŸ­ì˜ ìƒì„± ìœ„ì¹˜ ê²°ì •
         if (direction < 2)
         {
             spawnPosX -= -block_X / 2;
@@ -75,11 +73,11 @@ public class SpawnManager : MonoBehaviour
             spawnPosY -= -block_Y / 2;
         }
 
-        // ºí·° »ı¼º
+        // ë¸”ëŸ­ ìƒì„±
         brick = Instantiate(blockType, new Vector3(spawnPosX, spawnPosY, 0), Quaternion.identity);
         brick.GetComponent<PlatformMove>().MoveSpeed = new Vector2();
 
-        // ºí·° ÀÌµ¿ ¹æÇâ °áÁ¤
+        // ë¸”ëŸ­ ì´ë™ ë°©í–¥ ê²°ì •
         Vector2 moveVector = Vector2.zero;
         moveVector.x = moveVector.y = speed;
 
