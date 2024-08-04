@@ -13,10 +13,13 @@ public class PlayerDash : MonoBehaviour
 
     public bool IsDashing { get { return isDashing; } }
 
+    public bool IsUpDash { get { return isUpDash; } }
+
     public Vector2 DashVector { get { return dashVector; } }
 
     private bool isDashing;
     private bool canDash;
+    private bool isUpDash;
     private bool dashButtonPressed = false;
     private Vector2 dashVector;
 
@@ -27,6 +30,7 @@ public class PlayerDash : MonoBehaviour
     {
         isDashing = false;
         canDash = true;
+        isUpDash = false;
         dashButtonPressed = false;
         inputVector = Vector2.zero;
         hm = GetComponent<HorizontalMove>();
@@ -43,20 +47,21 @@ public class PlayerDash : MonoBehaviour
         isDashing = true;
         canDash = false;
         dashVector = Direction * 25f;
-        GetComponent<Rigidbody2D>().gravityScale = 3.0f;
 
         yield return new WaitForSeconds(0.15f);
 
         isDashing = false;
+        if (dashVector.y > 0) isUpDash = true;
         dashVector = Vector2.zero;
-        GetComponent<Rigidbody2D>().gravityScale = 1.0f;
-
+        
         StartCoroutine(DashDelay());
     }
 
     private IEnumerator DashDelay()
     {
         yield return new WaitForSeconds(0.15f);
+
+        isUpDash = false;
         canDash = true;
     }
 
