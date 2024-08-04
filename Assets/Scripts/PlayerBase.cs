@@ -57,6 +57,7 @@ public class PlayerBase : MonoBehaviour
     [Space] 
     [Header("Booleans")] 
     [SerializeField] private bool canWallJump = false;
+    [SerializeField] private bool canCoyoteJump = false;
     [SerializeField] private bool hasJumped = false;
     [SerializeField] private bool hasWallJumped = false;
 
@@ -82,6 +83,18 @@ public class PlayerBase : MonoBehaviour
             if (value != canWallJump)
             {
                 canWallJump = value;
+            }
+        }
+    }
+
+    public bool CanCoyoteJump
+    {
+        get { return canCoyoteJump; }
+        set
+        {
+            if (value != canCoyoteJump)
+            {
+                canCoyoteJump = value;
             }
         }
     }
@@ -163,6 +176,7 @@ public class PlayerBase : MonoBehaviour
             return;
         }
 
+        FinalVector += playerCollision.GetGroundVector();
         // 플레이어가 벽을 잡고 있으면 매달리기와 벽점프에 대한 벡터만 적용
         if (isWallClimbing)
         {
@@ -182,7 +196,6 @@ public class PlayerBase : MonoBehaviour
                 FinalVector += horizontalMove.GetMoveVector();
             }
 
-            FinalVector += playerCollision.GetGroundVector();
             FinalVector += playerJump.GetJumpVector();
             FinalVector += playerJump.GetGravityVector();
         }
