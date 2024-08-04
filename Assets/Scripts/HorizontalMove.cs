@@ -16,7 +16,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class HorizontalMove : MonoBehaviour
 {
-    public Vector2 inputVec, nextVec;
+    public Vector2 inputVec;
     public float speed;
 
     Rigidbody2D rigid;
@@ -26,6 +26,15 @@ public class HorizontalMove : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
 
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 이동 벡터를 계산하여 반환
+    /// </summary>
     public Vector2 GetMoveVector()
     {
         return new Vector2(inputVec.x * speed, rigid.velocity.y);

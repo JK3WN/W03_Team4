@@ -12,6 +12,7 @@ public class PlayerDash : MonoBehaviour
 
     private bool isDashing;
     private bool canDash;
+    private bool dashButtonPressed = false;
     private Vector2 dashVector;
 
     private Vector2 inputVector;
@@ -21,6 +22,7 @@ public class PlayerDash : MonoBehaviour
     {
         isDashing = false;
         canDash = true;
+        dashButtonPressed = false;
         inputVector = Vector2.zero;
         hm = GetComponent<HorizontalMove>();
         dashVector = Vector2.zero;
@@ -50,13 +52,19 @@ public class PlayerDash : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (!isDashing && canDash)
+        if (!isDashing && canDash && !dashButtonPressed)
         {
+            dashButtonPressed = true;
             inputVector = hm.inputVec;
 
             if (inputVector == Vector2.zero) return;
 
             StartCoroutine(DoDash(inputVector));
+        }
+
+        if (context.canceled)
+        {
+            dashButtonPressed = false;
         }
     }
     

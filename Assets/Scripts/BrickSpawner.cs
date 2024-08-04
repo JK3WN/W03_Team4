@@ -67,12 +67,9 @@ public class BrickSpawner : MonoBehaviour
         for(int i = 0; i<24; i++)
         {
             sumX += brickX[i];
-        }
-
-        float randomXY = Random.Range(0, 1/sumX+1/sumY);
+        }float randomXY = Random.Range(0, 1/sumX+1/sumY);
         float randomLR = Random.Range(0.0f, 1.0f);
-  
-        // YÃàÀÌ¶ó¸é
+        // YÃƒÃ Ã€ÃŒÂ¶Ã³Â¸Ã©
         if (randomXY <= 1/sumY)
         {
             index = 0;

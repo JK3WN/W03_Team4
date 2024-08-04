@@ -13,6 +13,7 @@ public class Attack : MonoBehaviour
     [Header("공격 y축")][Range(0.5f, 3.0f)] public float y;
     [Header("공격 쿨타임")][Range(0.5f, 3.0f)] public float attackCoolDown = 0.15f;
     private bool isAttacking = false;
+    public float sideAngle = 45f;
     #endregion
 
     /// <summary>
@@ -37,13 +38,15 @@ public class Attack : MonoBehaviour
     {
         isAttacking = true;
         pickaxe.SetActive(true);
+        // YJK, 컨트롤러에서 상하 공격이 더 어려워지도록 변경
+        float inputAngle = Vector2.SignedAngle(Vector2.right, horizontalMove.inputVec);
         //상단
-        if (horizontalMove.inputVec.y > 0)
+        if (horizontalMove.inputVec.y > 0 && inputAngle > sideAngle && inputAngle < 180 - sideAngle)
         {
             MovePickAxe(0, y, 0f);
         }
         //하단
-        else if (horizontalMove.inputVec.y < 0)
+        else if (horizontalMove.inputVec.y < 0 && inputAngle < -sideAngle && inputAngle > sideAngle - 180)
         {
             MovePickAxe(0, -y, 0f);
         }
