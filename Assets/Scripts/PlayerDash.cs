@@ -6,6 +6,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerDash : MonoBehaviour
 {
+    [Header("Dash Stats")]
+    public int MaxDashes = 1;
+    public float Dashes = 1.0f;
+    public float RechargeSpeed = 1f;
+
     public bool IsDashing { get { return isDashing; } }
 
     public Vector2 DashVector { get { return dashVector; } }
@@ -26,6 +31,11 @@ public class PlayerDash : MonoBehaviour
         inputVector = Vector2.zero;
         hm = GetComponent<HorizontalMove>();
         dashVector = Vector2.zero;
+    }
+
+    private void FixedUpdate()
+    {
+        Dashes = Mathf.Clamp(Dashes + RechargeSpeed * Time.deltaTime, 0, MaxDashes);
     }
 
     private IEnumerator DoDash(Vector2 Direction)
@@ -57,8 +67,8 @@ public class PlayerDash : MonoBehaviour
             dashButtonPressed = true;
             inputVector = hm.inputVec;
 
-            if (inputVector == Vector2.zero) return;
-
+            if (inputVector == Vector2.zero || Dashes < 1f) return;
+            Dashes -= 1f;
             StartCoroutine(DoDash(inputVector));
         }
 
