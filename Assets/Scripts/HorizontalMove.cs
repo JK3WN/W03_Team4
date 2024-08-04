@@ -26,22 +26,6 @@ public class HorizontalMove : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
 
-    void FixedUpdate()
-    {
-        //nextVec = new Vector2(inputVec.x * speed, rigid.velocity.y);
-        //rigid.MovePosition((rigid.position + nextVec));
-
-        //rigid.velocity = nextVec;
-
-        // YJK, 부모(땅 오브젝트)의 velocity를 플레이어에 추가
-        /*
-        if(transform.parent != null)
-        {
-            rigid.velocity += new Vector2(transform.parent.gameObject.GetComponent<Rigidbody2D>().velocity.x, 0);
-        }
-        */
-    }
-
     public Vector2 GetMoveVector()
     {
         return new Vector2(inputVec.x * speed, rigid.velocity.y);
@@ -61,12 +45,4 @@ public class HorizontalMove : MonoBehaviour
     {
         inputVec = context.ReadValue<Vector2>();
     }
-
-
-    /*void OnCollisionEnter2D(Collision2D collision)
-    {
-        rigid.velocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
-
-        Debug.Log(rigid.velocity);
-    }*/
 }

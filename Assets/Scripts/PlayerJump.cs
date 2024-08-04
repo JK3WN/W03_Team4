@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,7 +28,7 @@ public class PlayerJump : MonoBehaviour
     [Header("Jump Stats")]
     [Range(0.5f, 50.0f)]
     [SerializeField] private float jumpPower;
-    [SerializeField] private Vector2 wallJumpVector;
+    [SerializeField] private Vector2 wallJumpPowerVector;
 
     [Space]
 
@@ -40,9 +41,40 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private Vector2 gravityVector;
 
     [Space]
-    public Vector2 jumpVector;
+    [SerializeField] private Vector2 jumpVector;
+    [SerializeField] private Vector2 wallJumpVector;
 
-    private bool isJumping = false;
+    [SerializeField] private bool canWallJump = false;
+    [SerializeField] private bool isJumping = false;
+    [SerializeField] private bool hasWallJumped = false;
+    [SerializeField] private bool hasJumped = false;
+    [SerializeField] private bool isHoldJump = false;
+
+    [SerializeField] private float wallJumpLerpFactor;
+    [SerializeField] private float lerpEndTime;
+    [SerializeField] private float lerpCheckTime;
+
+    [SerializeField] private float wallJumpAbleTime = 0f;
+    [SerializeField] private float wallJumpCheckTime;
+
+    #endregion
+
+    #region 외부 참조
+
+    public bool CanWallJump
+    {
+        get { return canWallJump; }
+    }
+
+    public bool HasWallJumped
+    {
+        get { return hasWallJumped; }
+    }
+
+    public Vector2 WallJumpPowerVector
+    {
+        get { return wallJumpPowerVector; }
+    }
 
     #endregion
 
@@ -54,6 +86,15 @@ public class PlayerJump : MonoBehaviour
             playerCollision = GetComponent<PlayerCollision>();
         if (playerWallClimb == null)
             playerWallClimb = GetComponent<PlayerWallClimb>();
+    }
+
+    void Update()
+    {
+        if (hasWallJumped)
+            CheckWallJumpTime();
+        if (hasJumped)
+            CheckJumpTime();
+        CheckCanWallJump();
     }
 
     void FixedUpdate()
@@ -82,15 +123,11 @@ public class PlayerJump : MonoBehaviour
     {
         if (rb.velocity.y < 0)
         {
-            //rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-            //jumpVector += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-            gravityVector = Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            gravityVector = Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
         }
         else if (rb.velocity.y > 0)
         {
-            //rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-            //jumpVector += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-            gravityVector = Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+            gravityVector = Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
         }
     }
 
@@ -98,6 +135,59 @@ public class PlayerJump : MonoBehaviour
     {
         MultiplyOnPlayerFall();
         return gravityVector;
+    }
+
+    private void CheckCanWallJump()
+    {
+        if (playerWallClimb.IsWallClimbing)
+        {
+            canWallJump = true;
+            wallJumpCheckTime = 0;
+        }
+        else if (!canWallJump)
+            return;
+        else
+        {
+            wallJumpCheckTime += Time.deltaTime;
+            if (wallJumpCheckTime > wallJumpAbleTime)
+            {
+                canWallJump = false;
+                wallJumpCheckTime = 0;
+            }
+        }
+    }
+
+    public Vector2 LerpWallJumpVector(Vector2 moveVector)
+    {
+        wallJumpVector = Vector2.Lerp(wallJumpVector, moveVector, Time.fixedDeltaTime * wallJumpLerpFactor);
+        
+        return wallJumpVector;
+    }
+
+    private void CheckWallJumpTime()
+    {
+        lerpCheckTime += Time.deltaTime;
+
+        if (lerpCheckTime > lerpEndTime)
+        {
+            if (!isHoldJump)
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            hasWallJumped = false;
+            lerpCheckTime = 0f;
+        }
+    }
+
+    private void CheckJumpTime()
+    {
+        lerpCheckTime += Time.deltaTime;
+
+        if (lerpCheckTime > lerpEndTime)
+        {
+            if (!isHoldJump)
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            hasJumped = false;
+            lerpCheckTime = 0f;
+        }
     }
 
     /// <summary>
@@ -115,24 +205,29 @@ public class PlayerJump : MonoBehaviour
     {
         if (context.performed && playerCollision.OnGround)
         {
-            //rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             jumpVector = new Vector2(0, jumpPower);
-            Debug.Log($"{jumpVector}");
             isJumping = true;
+            isHoldJump = true;
+            hasJumped = true;
         }
 
-        if (context.performed && playerWallClimb.IsWallClimbing)
+        if (context.performed && canWallJump)
         {
-            //rb.velocity = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpVector.y);
-            //jumpVector = new Vector2(wallJumpVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpVector.y);
-            Debug.Log($"Wall Jump: {rb.velocity}");
+            jumpVector = new Vector2(wallJumpPowerVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpPowerVector.y);
+            wallJumpVector = jumpVector;
+            lerpCheckTime = 0;
+            Debug.Log($"{wallJumpVector}");
+            isJumping = true;
+            hasWallJumped = true;
+            isHoldJump = true;
         }
 
         if (context.canceled && rb.velocity.y > 0f)
         {
-            //rb.velocity = new Vector2(rb.velocity.x, 0);
+            isHoldJump = false;
             jumpVector = new Vector2(0, 0);
-            rb.velocity = new Vector2(rb.velocity.x, 0);
+            if (!hasJumped || ! hasWallJumped)
+                rb.velocity = new Vector2(rb.velocity.x, 0);
         }
     }
 

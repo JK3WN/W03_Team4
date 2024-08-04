@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Vector2 FinalVector2;
     [SerializeField] private HorizontalMove horizontalMove;
     [SerializeField] private PlayerCollision playerCollision;
@@ -30,13 +30,30 @@ public class PlayerBase : MonoBehaviour
             return;
         }
 
-        if (GetComponent<PlayerCollision>().GroundObject != null)
+        if (playerWallClimb.IsWallClimbing)
         {
-            FinalVector2 += new Vector2(GetComponent<PlayerCollision>().GroundObject.GetComponent<Rigidbody2D>().velocity.x, 0);
+            FinalVector2 += playerWallClimb.GetWallVector();
+            FinalVector2 += playerJump.GetJumpVector();
         }
-        FinalVector2 += playerJump.GetGravityVector();
-        FinalVector2 += horizontalMove.GetMoveVector();
-        FinalVector2 += playerJump.GetJumpVector();
+        else
+        {
+            if (GetComponent<PlayerCollision>().GroundObject != null)
+            {
+                FinalVector2 += new Vector2(GetComponent<PlayerCollision>().GroundObject.GetComponent<Rigidbody2D>().velocity.x, 0);
+            }
+
+            if (playerJump.HasWallJumped)
+            {
+                FinalVector2 += playerJump.LerpWallJumpVector(horizontalMove.GetMoveVector());
+            }
+            else
+            {
+                FinalVector2 += horizontalMove.GetMoveVector();
+            }
+
+            FinalVector2 += playerJump.GetJumpVector();
+            FinalVector2 += playerJump.GetGravityVector();
+        }
 
         rb.velocity = FinalVector2;
     }
