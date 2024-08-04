@@ -46,7 +46,7 @@ public class PlayerCollision : MonoBehaviour
     public Vector2 bottomOffset, rightOffset, leftOffset;
 
     [Space]
-    public GameObject GroundObject;
+    public Vector2 GroundVector;
     #endregion
 
     #region 로컬 변수 선언
@@ -75,17 +75,28 @@ public class PlayerCollision : MonoBehaviour
     {
         CheckCollision();
 
-        // YJK, 땅에 붙어있으면 땅 오브젝트를 GroundObject로
+        // CWS, 붙어있던 땅의 속력을 받아와 벡터에 적용
         if (onGround)
         {
-            GroundObject = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer).gameObject;
-        }
-        else
-        {
-            GroundObject = null;
+            GroundVector = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer)
+                .gameObject.GetComponent<Rigidbody2D>().velocity;
         }
 
         //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
+    }
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 붙어있던 땅의 벡터의 x 성분만 따와 반환
+    /// </summary>
+    public Vector2 GetGroundVector()
+    {
+        return new Vector2(GroundVector.x, 0);
     }
 
     void OnDrawGizmos()

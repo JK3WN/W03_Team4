@@ -149,11 +149,11 @@ public class PlayerBase : MonoBehaviour
         FinalVector = Vector2.zero;
 
         // 대쉬 시 velocity를 고정하여 적용, 대쉬 끝나기 전까지 다른 움직임 차단
-        /*if (playerDash.IsDashing)
+        if (playerDash.IsDashing)
         {
             rb.velocity = playerDash.DashVector;
             return;
-        }*/
+        }
 
         // 플레이어가 벽을 잡고 있으면 매달리기와 벽점프에 대한 벡터만 적용
         if (isWallClimbing)
@@ -163,12 +163,6 @@ public class PlayerBase : MonoBehaviour
         }
         else
         {
-            // 붙어있는 플랫폼의 속력 추가
-            if (playerCollision.GroundObject != null)
-            {
-                FinalVector += new Vector2(playerCollision.GroundObject.GetComponent<Rigidbody2D>().velocity.x, 0);
-            }
-
             // 벽점프 시 벽점프 벡터 적용
             if (hasWallJumped)
             {
@@ -180,6 +174,7 @@ public class PlayerBase : MonoBehaviour
                 FinalVector += horizontalMove.GetMoveVector();
             }
 
+            FinalVector += playerCollision.GetGroundVector();
             FinalVector += playerJump.GetJumpVector();
             FinalVector += playerJump.GetGravityVector();
         }
