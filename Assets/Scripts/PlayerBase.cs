@@ -10,18 +10,26 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private PlayerCollision playerCollision;
     [SerializeField] private PlayerJump playerJump;
     [SerializeField] private PlayerWallClimb playerWallClimb;
+    private PlayerDash playerDash;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerDash = GetComponent<PlayerDash>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         FinalVector2 = Vector2.zero;
-        
+
+        if (playerDash.IsDashing)
+        {
+            rb.velocity = playerDash.DashVector;
+            return;
+        }
+
         if (playerWallClimb.IsWallClimbing)
         {
             FinalVector2 += playerWallClimb.GetWallVector();
