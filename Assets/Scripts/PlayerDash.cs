@@ -22,6 +22,7 @@ public class PlayerDash : MonoBehaviour
     {
         isDashing = false;
         canDash = true;
+        dashButtonPressed = false;
         inputVector = Vector2.zero;
         hm = GetComponent<HorizontalMove>();
         dashVector = Vector2.zero;
