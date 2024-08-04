@@ -284,8 +284,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 6, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1939666501570605527}
   - {fileID: 2234466527723984228}
@@ -437,8 +437,9 @@ MonoBehaviour:
   - {fileID: 5344433257289090904}
   Item: 0
   Exp: 1
-  x: 3
-  y: 1
+  x: 6
+  y: 2
+  start: 0
   HP: 0
   isTouched: 0
 --- !u!1 &6084226919867252217
