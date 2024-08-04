@@ -9,16 +9,42 @@ public class SpawnManager : MonoBehaviour
     public GameObject[] MirrorList;
     public GameObject[] BrickList;
 
+    public BrickSpawner brickSpawner;
+
     // Start is called before the first frame update
     void Start()
     {
-        //SpawnBrick(0, 0, 5f, BrickList[2]);
+        if(brickSpawner == null) brickSpawner = GetComponent<BrickSpawner>();
+        StartCoroutine("Spawn");
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    // YJK, TimeInterval마다 한 블록씩 스폰
+    IEnumerator Spawn()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(TimeInterval);
+            int direction = brickSpawner.RandomDirection();
+            int startPos = -1;
+            GameObject blockType = BrickList[Random.Range(0, BrickList.Length - 1)];
+            if(direction < 2)
+            {
+                startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().y);
+            }
+            else
+            {
+                startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().x);
+            }
+            float speed = blockType.GetComponent<PlatformMove>().MoveSpeed.magnitude;
+            SpawnBrick(direction, startPos, speed, blockType);
+            brickSpawner.AddBrick(blockType, direction);
+        }
     }
 
     // YJK, 원하는 블록을 스폰시키는 명령
