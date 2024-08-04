@@ -20,7 +20,6 @@ public class PlayerJump : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private PlayerBase playerBase;
-    [SerializeField] private PlayerCollision playerCollision;
 
     [Space]
 
@@ -75,8 +74,6 @@ public class PlayerJump : MonoBehaviour
             rb = GetComponent<Rigidbody2D>();
         if (playerBase == null)
             playerBase = GetComponent<PlayerBase>();
-        if (playerCollision  == null)
-            playerCollision = GetComponent<PlayerCollision>();
     }
 
     // 점프에 대한 각종 타이머 계산
@@ -257,7 +254,7 @@ public class PlayerJump : MonoBehaviour
     /// </summary>
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed && playerCollision.OnGround)
+        if (context.performed && playerBase.OnGround)
         {
             jumpVector = new Vector2(0, jumpPower);
             isJumping = true;
@@ -267,7 +264,7 @@ public class PlayerJump : MonoBehaviour
 
         if (context.performed && playerBase.CanWallJump)
         {
-            jumpVector = new Vector2(wallJumpPowerVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpPowerVector.y);
+            jumpVector = new Vector2(wallJumpPowerVector.x * (playerBase.WallSide == 1 ? -1 : 1), wallJumpPowerVector.y);
             wallJumpVector = jumpVector;
             jumpCheckTime = 0;
             Debug.Log($"{wallJumpVector}");

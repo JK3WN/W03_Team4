@@ -12,19 +12,31 @@ using UnityEngine;
 /// 플레이어 오브젝트 관리용 클래스
 /// 플레이어에 적용될 각종 컴포넌트를 참조받아 PlayerBase에서 플레이어의 모든 물리 벡터 적용
 /// <para>
-/// FinalVector: 플레이어에 적용할 모든 물리 벡터를 합친 최종 벡터
+/// FinalVector : 플레이어에 적용할 모든 물리 벡터를 합친 최종 벡터
 /// </para>
 /// <para>
-/// CanWallJump: 벽 점프가 가능한지에 대한 판정 True/False 반환
+/// CanWallJump : 벽 점프가 가능한지에 대한 판정 True/False 반환
 /// </para>
 /// <para>
-/// HasJumped: 플레이어가 점프 상태인지 True/False 반환
+/// HasJumped : 플레이어가 점프 상태인지 True/False 반환
 /// </para>
 /// <para>
-/// HasWallJumped: 플레이어가 벽점프 상태인지 True/False 반환
+/// HasWallJumped : 플레이어가 벽점프 상태인지 True/False 반환
 /// </para>
 /// <para>
-/// IsWallClimbing: 벽에 매달렸는지에 대한 판전 True/False 반환
+/// IsWallClimbing : 벽에 매달렸는지에 대한 판전 True/False 반환
+/// </para>
+/// <para>
+/// OnGround : 플레이어가 땅에 있는지 True/False 반환
+/// </para>
+/// <para>
+/// OnWall : 플레이어가 벽에 붙었는지 True/False 반환
+/// </para>
+/// <para>
+/// WallSide : 어느 방향 벽에 붙었는지 int 반환
+/// </para>
+/// <para>
+/// 0 : 벽X | 1 : 오른쪽 | 2 : 왼쪽
 /// </para>
 /// </summary>
 public class PlayerBase : MonoBehaviour
@@ -54,12 +66,7 @@ public class PlayerBase : MonoBehaviour
                                    && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0) 
                                    && !playerCollision.OnGround 
                                    && rb.velocity.y <= 0;
-
-    [Space] 
-    [SerializeField] private bool onGround;
-    [SerializeField] private bool onWall;
-    [SerializeField] private bool onRightWall;
-    [SerializeField] private bool onLeftWall;
+    
     #endregion
 
     #region 외부 참조
@@ -107,6 +114,21 @@ public class PlayerBase : MonoBehaviour
     public bool IsWallClimbing
     {
         get { return isWallClimbing; }
+    }
+
+    public bool OnGround
+    {
+        get { return playerCollision.OnGround; }
+    }
+
+    public bool OnWall
+    {
+        get { return playerCollision.OnWall; }
+    }
+
+    public int WallSide
+    {
+        get { return playerCollision.WallSide; }
     }
 
     #endregion
