@@ -48,12 +48,12 @@ public class Attack : MonoBehaviour
         //го╢э
         else if (horizontalMove.inputVec.y < 0 && inputAngle < -sideAngle && inputAngle > sideAngle - 180)
         {
-            MovePickAxe(0, -y, 0f);
+            MovePickAxe(0, -y, 180f);
         }
         //©Л
         else if (horizontalMove.inputVec.x > 0)
         {
-            MovePickAxe(x, 0, 90.0f);
+            MovePickAxe(x, 0, -90.0f);
         }
         //аб
         else if (horizontalMove.inputVec.x < 0)
