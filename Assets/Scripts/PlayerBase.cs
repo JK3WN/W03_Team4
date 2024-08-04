@@ -163,12 +163,6 @@ public class PlayerBase : MonoBehaviour
         }
         else
         {
-            // 붙어있는 플랫폼의 속력 추가
-            if (playerCollision.GroundObject != null)
-            {
-                FinalVector += new Vector2(playerCollision.GroundObject.GetComponent<Rigidbody2D>().velocity.x, 0);
-            }
-
             // 벽점프 시 벽점프 벡터 적용
             if (hasWallJumped)
             {
@@ -180,6 +174,7 @@ public class PlayerBase : MonoBehaviour
                 FinalVector += horizontalMove.GetMoveVector();
             }
 
+            FinalVector += playerCollision.GetGroundVector();
             FinalVector += playerJump.GetJumpVector();
             FinalVector += playerJump.GetGravityVector();
         }
