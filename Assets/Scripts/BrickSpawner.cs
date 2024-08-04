@@ -16,38 +16,38 @@ public class BrickSpawner : MonoBehaviour
 
     public float[] percents = new float[25];
 
-    public void AddBrick(GameObject brick, int direction)
+    public void AddBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();
         if (direction == 0 || direction == 1)
         {
-            for (int i = platformMove.start; i < platformMove.start+platformMove.y; i++)
+            for (int i = startPos; i < startPos + platformMove.y; i++)
             {
                 brickY[i]++;
             }
         }
         else
         {
-            for (int i = platformMove.start; i < platformMove.start + platformMove.y; i++)
+            for (int i = startPos; i < startPos + platformMove.x; i++)
             {
                 brickX[i]++;
             }
         }
     }
 
-    public void DeleteBrick(GameObject brick, int direction)
+    public void DeleteBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();
         if (direction == 0 || direction == 1)
         {
-            for (int i = platformMove.start; i < platformMove.start + platformMove.y; i++)
+            for (int i = startPos; i < startPos + platformMove.y; i++)
             {
                 brickY[i]--;
             }
         }
         else
         {
-            for (int i = platformMove.start; i < platformMove.start + platformMove.y; i++)
+            for (int i = startPos; i < startPos + platformMove.x; i++)
             {
                 brickX[i]--;
             }
@@ -57,8 +57,8 @@ public class BrickSpawner : MonoBehaviour
     public int RandomDirection()
     {
         int index = 0;
-        int sumX = 0;
-        int sumY = 0;
+        float sumX = 0;
+        float sumY = 0;
         for(int i = 0; i< 15; i++)
         {
             sumY += brickY[i];
@@ -67,12 +67,10 @@ public class BrickSpawner : MonoBehaviour
         for(int i = 0; i<24; i++)
         {
             sumX += brickX[i];
-        }
-        float randomXY = Random.Range(0, sumX+sumY);
-        float randomLR = Random.Range(0, 1);
-
-        // YÃàÀÌ¶ó¸é
-        if (randomXY <= sumY)
+        }float randomXY = Random.Range(0, 1/sumX+1/sumY);
+        float randomLR = Random.Range(0.0f, 1.0f);
+        // YÃƒÃ Ã€ÃŒÂ¶Ã³Â¸Ã©
+        if (randomXY <= 1/sumY)
         {
             index = 0;
         }
@@ -105,13 +103,13 @@ public class BrickSpawner : MonoBehaviour
 
             for (int i = 0; i < 15 - brickCount + 1; i++)
             {
-                percents[i + 1] = percents[i] + (1f / additionalBrickY[i]);
+                percents[i + 1] = percents[i] + (1f / (float)additionalBrickY[i]);
             }
 
-            float randX = Random.Range(0, percents[15 - brickCount]);
+            float randX = Random.Range(0.0f, percents[15 - brickCount + 1]);
             for (int i = 15 - brickCount + 1; i >= 1; i--)
             {
-                if (randX < percents[i+1])
+                if (randX > percents[i])
                 {
                     index = i;
                     break;
@@ -122,6 +120,7 @@ public class BrickSpawner : MonoBehaviour
         {
             for (int i = 0; i < 24 - brickCount + 1; i++)
             {
+                additionalBrickX[i] = 1;
                 for (int j = i; j < i + brickCount; j++)
                 {
                     additionalBrickX[i] += brickX[j];
@@ -133,10 +132,10 @@ public class BrickSpawner : MonoBehaviour
                 percents[i + 1] = percents[i] + (1f / additionalBrickX[i]);
             }
 
-            float randX = Random.Range(0, percents[24 - brickCount]);
+            float randX = Random.Range(0, percents[24 - brickCount + 1]);
             for (int i = 24 - brickCount + 1; i >= 1; i--)
             {
-                if (randX < percents[i+1])
+                if (randX > percents[i])
                 {
                     index =  i;
                     break;
