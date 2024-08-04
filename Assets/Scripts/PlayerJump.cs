@@ -60,14 +60,16 @@ public class PlayerJump : MonoBehaviour
 
     #region 로컬 변수 선언
 
-    private bool isJumping = false;
-    [SerializeField] private bool isHoldJump = false;
-    [SerializeField] private float jumpCheckTime;
-    private float wallJumpCheckTime;
-    private bool isBufferFull;
-    private float bufferCheckTime;
+    private bool isJumping = false;     // 점프 벡터 확정 적용 제어 bool
+    private bool isHoldJump = false;    // 점프키 입력 체크 변수(누르고 있으면 true)
+    private float jumpCheckTime;        // 최소 점프 높이 설정 타이머용 변수
+    private float wallJumpCheckTime;    // 벽점프 코요테 타임 타이머용 변수
+    private bool isBufferFull;          // 선입력 버퍼 적용 bool
+    private float bufferCheckTime;      // 버퍼 초기화 타이머용 변수
 
     #endregion
+
+    #region MonoBehavior 이벤트 함수
 
     void Awake()
     {
@@ -94,9 +96,11 @@ public class PlayerJump : MonoBehaviour
 
     void FixedUpdate()
     {
+        // input buffer에 선입력된 점프가 있는 상태에서 땅에 닿으면 점프
         if (isBufferFull && playerBase.OnGround)
         {
             SetJumpVector();
+            // 다음 구문에서 벡터 확정 후 초기화를 막기 위해서 return
             return;
         }
 
@@ -109,6 +113,25 @@ public class PlayerJump : MonoBehaviour
         jumpVector = Vector2.zero;
 
         MultiplyOnPlayerFall();
+    }
+
+    #endregion
+
+    #region 중력 함수
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 플레이어의 중력 계산 후 중력에 대한 벡터를 반환
+    /// </summary>
+    public Vector2 GetGravityVector()
+    {
+        MultiplyOnPlayerFall();
+        return gravityVector;
     }
 
     /// <summary>
@@ -134,6 +157,10 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region 점프 함수
+
     /// <summary>
     /// <para>
     /// 작성자 : 조우석
@@ -141,12 +168,111 @@ public class PlayerJump : MonoBehaviour
     /// <para>
     /// ===========================================
     /// </para>
-    /// 플레이어의 중력 계산 후 중력에 대한 벡터를 반환
+    /// 점프 벡터를 반환
     /// </summary>
-    public Vector2 GetGravityVector()
+    public Vector2 GetJumpVector()
     {
-        MultiplyOnPlayerFall();
-        return gravityVector;
+        return jumpVector;
+    }
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 점프 시 적용해줘야 하는 값들 세팅
+    /// </summary>
+    private void SetJumpVector()
+    {
+        jumpVector = new Vector2(0, jumpPower);
+        isJumping = true;
+        playerBase.HasJumped = true;
+        isBufferFull = false;
+    }
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 타이머를 통해 점프 최소 지속시간 계산
+    /// </summary>
+    private void CheckJumpTime()
+    {
+        jumpCheckTime += Time.deltaTime;
+
+        if (jumpCheckTime > jumpEndTime)
+        {
+            if (!isHoldJump)
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            playerBase.HasJumped = false;
+            jumpCheckTime = 0f;
+        }
+    }
+
+    #endregion
+
+    #region 선입력 시스템 함수
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// input buffer에 점프 선입력 정보 추가
+    /// </summary>
+    private void AddInputBuffer()
+    {
+        isBufferFull = true;
+        bufferCheckTime = 0;
+    }
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 버퍼 지속시간 체크
+    /// input buffer에 점프 선입력이 들어있으면 일정 시간이 지나면 버퍼를 초기화한다.
+    /// </summary>
+    private void CheckBufferTime()
+    {
+        bufferCheckTime += Time.deltaTime;
+
+        if (bufferCheckTime > bufferResetTime)
+        {
+            isBufferFull = false;
+            bufferCheckTime = 0;
+        }
+    }
+
+    #endregion
+
+    #region 벽점프 함수
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 벽점프 벡터 계산 후 반환
+    /// 벽점프 벡터는 이동 벡터와 선형 보간을 통해서 자연스러운 벽점프 방향 전환 적용
+    /// </summary>
+    public Vector2 LerpWallJumpVector(Vector2 moveVector)
+    {
+        wallJumpVector = Vector2.Lerp(wallJumpVector, moveVector, Time.fixedDeltaTime * wallJumpLerpFactor);
+
+        return wallJumpVector;
     }
 
     /// <summary>
@@ -200,83 +326,9 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// <para>
-    /// 작성자 : 조우석
-    /// </para>
-    /// <para>
-    /// ===========================================
-    /// </para>
-    /// 타이머를 통해 점프 최소 지속시간 계산
-    /// </summary>
-    private void CheckJumpTime()
-    {
-        jumpCheckTime += Time.deltaTime;
+    #endregion
 
-        if (jumpCheckTime > jumpEndTime)
-        {
-            if (!isHoldJump)
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-            playerBase.HasJumped = false;
-            jumpCheckTime = 0f;
-        }
-    }
-
-    private void CheckBufferTime()
-    {
-        bufferCheckTime += Time.deltaTime;
-
-        if (bufferCheckTime > bufferResetTime)
-        {
-            isBufferFull = false;
-            bufferCheckTime = 0;
-        }
-    }
-
-    /// <summary>
-    /// <para>
-    /// 작성자 : 조우석
-    /// </para>
-    /// <para>
-    /// ===========================================
-    /// </para>
-    /// 점프 벡터를 반환
-    /// </summary>
-    public Vector2 GetJumpVector()
-    {
-        return jumpVector;
-    }
-
-    /// <summary>
-    /// <para>
-    /// 작성자 : 조우석
-    /// </para>
-    /// <para>
-    /// ===========================================
-    /// </para>
-    /// 벽점프 벡터 계산 후 반환
-    /// 벽점프 벡터는 이동 벡터와 선형 보간을 통해서 자연스러운 벽점프 방향 전환 적용
-    /// </summary>
-    public Vector2 LerpWallJumpVector(Vector2 moveVector)
-    {
-        wallJumpVector = Vector2.Lerp(wallJumpVector, moveVector, Time.fixedDeltaTime * wallJumpLerpFactor);
-        
-        return wallJumpVector;
-    }
-
-    private void SetJumpVector()
-    {
-        jumpVector = new Vector2(0, jumpPower);
-        isJumping = true;
-        playerBase.HasJumped = true;
-        isBufferFull = false;
-    }
-
-    private void AddInputBuffer()
-    {
-        isBufferFull = true;
-        bufferCheckTime = 0;
-    }
+    #region Input System 이벤트 함수
 
     /// <summary>
     /// <para>
@@ -291,6 +343,7 @@ public class PlayerJump : MonoBehaviour
     /// </summary>
     public void OnJump(InputAction.CallbackContext context)
     {
+        // 점프 키를 눌렀을 때
         if (context.performed)
         {
             isHoldJump = true;
@@ -315,6 +368,7 @@ public class PlayerJump : MonoBehaviour
             }
         }
 
+        // 점프 키를 뗐을 때
         if (context.canceled)
         {
             isHoldJump = false;
@@ -326,4 +380,6 @@ public class PlayerJump : MonoBehaviour
             }
         }
     }
+
+    #endregion
 }
