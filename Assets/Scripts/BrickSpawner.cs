@@ -16,38 +16,38 @@ public class BrickSpawner : MonoBehaviour
 
     public float[] percents = new float[25];
 
-    public void AddBrick(GameObject brick, int direction)
+    public void AddBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();
         if (direction == 0 || direction == 1)
         {
-            for (int i = platformMove.start; i < platformMove.start+platformMove.y; i++)
+            for (int i = startPos; i < startPos + platformMove.y; i++)
             {
                 brickY[i]++;
             }
         }
         else
         {
-            for (int i = platformMove.start; i < platformMove.start + platformMove.x; i++)
+            for (int i = startPos; i < startPos + platformMove.x; i++)
             {
                 brickX[i]++;
             }
         }
     }
 
-    public void DeleteBrick(GameObject brick, int direction)
+    public void DeleteBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();
         if (direction == 0 || direction == 1)
         {
-            for (int i = platformMove.start; i < platformMove.start + platformMove.y; i++)
+            for (int i = startPos; i < startPos + platformMove.y; i++)
             {
                 brickY[i]--;
             }
         }
         else
         {
-            for (int i = platformMove.start; i < platformMove.start + platformMove.x; i++)
+            for (int i = startPos; i < startPos + platformMove.x; i++)
             {
                 brickX[i]--;
             }

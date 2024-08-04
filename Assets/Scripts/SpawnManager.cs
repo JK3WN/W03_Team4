@@ -43,7 +43,7 @@ public class SpawnManager : MonoBehaviour
             }
             float speed = blockType.GetComponent<PlatformMove>().MoveSpeed.magnitude;
             SpawnBrick(direction, startPos, speed, blockType);
-            brickSpawner.AddBrick(blockType, direction);
+            brickSpawner.AddBrick(blockType, startPos, direction);
         }
     }
 
