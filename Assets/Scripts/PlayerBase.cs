@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// <para>
-/// 작성자 : 
+/// 작성자 : 1.임재균, 2.조우석
 /// </para>
 /// <para>
 /// ===========================================
@@ -13,6 +13,18 @@ using UnityEngine;
 /// 플레이어에 적용될 각종 컴포넌트를 참조받아 PlayerBase에서 플레이어의 모든 물리 벡터 적용
 /// <para>
 /// FinalVector: 플레이어에 적용할 모든 물리 벡터를 합친 최종 벡터
+/// </para>
+/// <para>
+/// CanWallJump: 벽 점프가 가능한지에 대한 판정 True/False 반환
+/// </para>
+/// <para>
+/// HasJumped: 플레이어가 점프 상태인지 True/False 반환
+/// </para>
+/// <para>
+/// HasWallJumped: 플레이어가 벽점프 상태인지 True/False 반환
+/// </para>
+/// <para>
+/// IsWallClimbing: 벽에 매달렸는지에 대한 판전 True/False 반환
 /// </para>
 /// </summary>
 public class PlayerBase : MonoBehaviour
@@ -29,6 +41,74 @@ public class PlayerBase : MonoBehaviour
     [Space]
     [Header("Player Physics")]
     [SerializeField] private Vector2 FinalVector;
+
+    [Space] 
+    [Header("Booleans")] 
+    [SerializeField] private bool canWallJump = false;
+    [SerializeField] private bool hasJumped = false;
+    [SerializeField] private bool hasWallJumped = false;
+
+    // 플레이어가 벽에 붙음 && 플레이어가 벽 방향으로 키보드 누름
+    // && 플레이어가 땅에 붙어있지 않음 && 플레이어가 상승중이 아닐 때
+    private bool isWallClimbing => playerCollision.OnWall 
+                                   && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0) 
+                                   && !playerCollision.OnGround 
+                                   && rb.velocity.y <= 0;
+
+    [Space] 
+    [SerializeField] private bool onGround;
+    [SerializeField] private bool onWall;
+    [SerializeField] private bool onRightWall;
+    [SerializeField] private bool onLeftWall;
+    #endregion
+
+    #region 외부 참조
+
+    // 현재 벽 점프가 가능한지 반환
+    public bool CanWallJump 
+    {
+        get { return canWallJump; }
+        set
+        {
+            if (value != canWallJump)
+            {
+                canWallJump = value;
+            }
+        }
+    }
+
+    // 현재 점프 상태인지 반환
+    public bool HasJumped
+    {
+        get { return hasJumped; }
+        set
+        {
+            if (value != hasJumped)
+            {
+                hasJumped = value;
+            }
+        }
+    }
+
+    // 현재 벽점프 상태인지 반환
+    public bool HasWallJumped
+    {
+        get { return hasWallJumped; }
+        set
+        {
+            if (value != hasWallJumped)
+            {
+                hasWallJumped = value;
+            }
+        }
+    }
+
+    // 현재 벽 타기 상태인지 반환
+    public bool IsWallClimbing
+    {
+        get { return isWallClimbing; }
+    }
+
     #endregion
 
 
@@ -42,20 +122,19 @@ public class PlayerBase : MonoBehaviour
         playerDash = GetComponent<PlayerDash>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         FinalVector = Vector2.zero;
 
         // 대쉬 시 velocity를 고정하여 적용, 대쉬 끝나기 전까지 다른 움직임 차단
-        if (playerDash.IsDashing)
+        /*if (playerDash.IsDashing)
         {
             rb.velocity = playerDash.DashVector;
             return;
-        }
+        }*/
 
         // 플레이어가 벽을 잡고 있으면 매달리기와 벽점프에 대한 벡터만 적용
-        if (playerWallClimb.IsWallClimbing)
+        if (isWallClimbing)
         {
             FinalVector += playerWallClimb.GetWallVector();
             FinalVector += playerJump.GetJumpVector();
@@ -69,7 +148,7 @@ public class PlayerBase : MonoBehaviour
             }
 
             // 벽점프 시 벽점프 벡터 적용
-            if (playerJump.HasWallJumped)
+            if (hasWallJumped)
             {
                 FinalVector += playerJump.LerpWallJumpVector(horizontalMove.GetMoveVector());
             }

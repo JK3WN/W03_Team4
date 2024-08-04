@@ -75,7 +75,6 @@ public class PlayerCollision : MonoBehaviour
     {
         CheckCollision();
 
-
         // YJK, 땅에 붙어있으면 땅 오브젝트를 GroundObject로
         if (onGround)
         {

@@ -19,9 +19,8 @@ public class PlayerJump : MonoBehaviour
     #region 인스텍터 변수 선언
 
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private PlayerBase playerBase;
     [SerializeField] private PlayerCollision playerCollision;
-    // 플레이어 베이스 클래스 추가 시 수정 필요
-    [SerializeField] private PlayerWallClimb playerWallClimb;
 
     [Space]
 
@@ -29,6 +28,8 @@ public class PlayerJump : MonoBehaviour
     [Range(0.5f, 50.0f)]
     [SerializeField] private float jumpPower;
     [SerializeField] private Vector2 wallJumpPowerVector;
+    [Range(0.01f, 50.0f)]
+    [SerializeField] private float wallJumpLerpFactor;
 
     [Space]
 
@@ -38,43 +39,33 @@ public class PlayerJump : MonoBehaviour
     [Range(0.01f, 10.0f)]
     [SerializeField] private float lowJumpMultiplier = 2f;
 
-    [SerializeField] private Vector2 gravityVector;
+    [Space]
+
+    [Header("Minimum Jump Timer")]
+    [Range(0f, 1.0f)]
+    [SerializeField] private float jumpEndTime;
+    [SerializeField] private float jumpCheckTime;
 
     [Space]
-    [SerializeField] private Vector2 jumpVector;
-    [SerializeField] private Vector2 wallJumpVector;
 
-    [SerializeField] private bool canWallJump = false;
-    [SerializeField] private bool isJumping = false;
-    [SerializeField] private bool hasWallJumped = false;
-    [SerializeField] private bool hasJumped = false;
-    [SerializeField] private bool isHoldJump = false;
-
-    [SerializeField] private float wallJumpLerpFactor;
-    [SerializeField] private float lerpEndTime;
-    [SerializeField] private float lerpCheckTime;
-
+    [Header("Wall Jump Detection Timer")]
+    [Range(0f, 1.0f)]
     [SerializeField] private float wallJumpAbleTime = 0f;
     [SerializeField] private float wallJumpCheckTime;
 
+    [Space]
+
+    [Header("Result Vectors")]
+    [SerializeField] private Vector2 gravityVector;
+    [SerializeField] private Vector2 jumpVector;
+    [SerializeField] private Vector2 wallJumpVector;
+
     #endregion
 
-    #region 외부 참조
+    #region 로컬 변수 선언
 
-    public bool CanWallJump
-    {
-        get { return canWallJump; }
-    }
-
-    public bool HasWallJumped
-    {
-        get { return hasWallJumped; }
-    }
-
-    public Vector2 WallJumpPowerVector
-    {
-        get { return wallJumpPowerVector; }
-    }
+    private bool isJumping = false;
+    private bool isHoldJump = false;
 
     #endregion
 
@@ -82,17 +73,17 @@ public class PlayerJump : MonoBehaviour
     {
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
+        if (playerBase == null)
+            playerBase = GetComponent<PlayerBase>();
         if (playerCollision  == null)
             playerCollision = GetComponent<PlayerCollision>();
-        if (playerWallClimb == null)
-            playerWallClimb = GetComponent<PlayerWallClimb>();
     }
 
     void Update()
     {
-        if (hasWallJumped)
+        if (playerBase.HasWallJumped)
             CheckWallJumpTime();
-        if (hasJumped)
+        if (playerBase.HasJumped)
             CheckJumpTime();
         CheckCanWallJump();
     }
@@ -139,19 +130,19 @@ public class PlayerJump : MonoBehaviour
 
     private void CheckCanWallJump()
     {
-        if (playerWallClimb.IsWallClimbing)
+        if (playerBase.IsWallClimbing)
         {
-            canWallJump = true;
+            playerBase.CanWallJump = true;
             wallJumpCheckTime = 0;
         }
-        else if (!canWallJump)
+        else if (!playerBase.CanWallJump)
             return;
         else
         {
             wallJumpCheckTime += Time.deltaTime;
             if (wallJumpCheckTime > wallJumpAbleTime)
             {
-                canWallJump = false;
+                playerBase.CanWallJump = false;
                 wallJumpCheckTime = 0;
             }
         }
@@ -166,27 +157,27 @@ public class PlayerJump : MonoBehaviour
 
     private void CheckWallJumpTime()
     {
-        lerpCheckTime += Time.deltaTime;
+        jumpCheckTime += Time.deltaTime;
 
-        if (lerpCheckTime > lerpEndTime)
+        if (jumpCheckTime > jumpEndTime)
         {
             if (!isHoldJump)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
-            hasWallJumped = false;
-            lerpCheckTime = 0f;
+            playerBase.HasWallJumped = false;
+            jumpCheckTime = 0f;
         }
     }
 
     private void CheckJumpTime()
     {
-        lerpCheckTime += Time.deltaTime;
+        jumpCheckTime += Time.deltaTime;
 
-        if (lerpCheckTime > lerpEndTime)
+        if (jumpCheckTime > jumpEndTime)
         {
             if (!isHoldJump)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
-            hasJumped = false;
-            lerpCheckTime = 0f;
+            playerBase.HasJumped = false;
+            jumpCheckTime = 0f;
         }
     }
 
@@ -208,17 +199,17 @@ public class PlayerJump : MonoBehaviour
             jumpVector = new Vector2(0, jumpPower);
             isJumping = true;
             isHoldJump = true;
-            hasJumped = true;
+            playerBase.HasJumped = true;
         }
 
-        if (context.performed && canWallJump)
+        if (context.performed && playerBase.CanWallJump)
         {
             jumpVector = new Vector2(wallJumpPowerVector.x * (playerCollision.WallSide == 1 ? -1 : 1), wallJumpPowerVector.y);
             wallJumpVector = jumpVector;
-            lerpCheckTime = 0;
+            jumpCheckTime = 0;
             Debug.Log($"{wallJumpVector}");
             isJumping = true;
-            hasWallJumped = true;
+            playerBase.HasWallJumped = true;
             isHoldJump = true;
         }
 
@@ -226,7 +217,7 @@ public class PlayerJump : MonoBehaviour
         {
             isHoldJump = false;
             jumpVector = new Vector2(0, 0);
-            if (!hasJumped || ! hasWallJumped)
+            if (!playerBase.HasJumped && !playerBase.HasWallJumped)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
         }
     }

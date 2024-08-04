@@ -16,7 +16,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class HorizontalMove : MonoBehaviour
 {
-    public Vector2 inputVec, nextVec;
+    public Vector2 inputVec;
     public float speed;
 
     Rigidbody2D rigid;

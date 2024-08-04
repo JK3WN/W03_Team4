@@ -16,15 +16,6 @@ public class PlayerWallClimb : MonoBehaviour
     #region 인스텍터 변수 선언
 
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private PlayerCollision playerCollision;
-    // 플레이어 베이스 클래스 추가 시 수정 필요
-    [SerializeField] private HorizontalMove horizontalMove;
-
-    // 플레이어 베이스 클래스 추가 시 boolean 이동
-    private bool isWallClimbing => playerCollision.OnWall 
-                                   && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0)
-                                   && !playerCollision.OnGround
-                                   && rb.velocity.y <= 0;
 
     [Space]
 
@@ -33,14 +24,8 @@ public class PlayerWallClimb : MonoBehaviour
     [SerializeField] private float wallSlowFallValue;
 
     [Space]
-    public Vector2 wallVector;
-
-    #endregion
-
-    #region 외부 참조
-
-    // 벽에 매달렸는지 반환
-    public bool IsWallClimbing { get { return isWallClimbing; } }
+    [Header("Result Vector")]
+    [SerializeField] private Vector2 wallVector;
 
     #endregion
 
@@ -48,14 +33,11 @@ public class PlayerWallClimb : MonoBehaviour
     {
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
-        if (playerCollision == null)
-            playerCollision = GetComponent<PlayerCollision>();
-        if (horizontalMove == null)
-            horizontalMove = GetComponent<HorizontalMove>();
     }
     
     public Vector2 GetWallVector()
     {
-        return new Vector2(rb.velocity.x, -wallSlowFallValue);
+        wallVector = new Vector2(rb.velocity.x, -wallSlowFallValue);
+        return wallVector;
     }
 }
