@@ -19,6 +19,19 @@ public class BrickSpawner : MonoBehaviour
 
     public float[] percents = new float[columnSize + 1];
 
+    public void Awake()
+    {
+        for (int i = 0; i < brickX.Length; i++)
+        {
+            brickX[i] = 1;
+        }
+
+        for (int i = 0; i < brickY.Length; i++)
+        {
+            brickY[i] = 1;
+        }
+    }
+
     public void AddBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();
