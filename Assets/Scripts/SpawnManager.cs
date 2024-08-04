@@ -27,7 +27,7 @@ public class SpawnManager : MonoBehaviour
     // YJK, TimeInterval마다 한 블록씩 스폰
     IEnumerator Spawn()
     {
-        while (true)
+        while (GameManager.isPlaying)
         {
             yield return new WaitForSeconds(TimeInterval);
             int direction = brickSpawner.RandomDirection();
