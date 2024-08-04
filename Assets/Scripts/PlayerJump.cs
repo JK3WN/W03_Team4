@@ -29,6 +29,7 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private Vector2 wallJumpPowerVector;
     [Range(0.01f, 50.0f)]
     [SerializeField] private float wallJumpLerpFactor;
+    [SerializeField] private float inputBufferKeepingTime;
 
     [Space]
 
@@ -40,17 +41,13 @@ public class PlayerJump : MonoBehaviour
 
     [Space]
 
-    [Header("Minimum Jump Timer")]
+    [Header("Timer")]
     [Range(0f, 1.0f)]
     [SerializeField] private float jumpEndTime;
-    [SerializeField] private float jumpCheckTime;
-
-    [Space]
-
-    [Header("Wall Jump Detection Timer")]
     [Range(0f, 1.0f)]
     [SerializeField] private float wallJumpAbleTime = 0f;
-    [SerializeField] private float wallJumpCheckTime;
+    [Range(0f, 1.0f)]
+    [SerializeField] private float bufferResetTime = 0f;
 
     [Space]
 
@@ -64,7 +61,11 @@ public class PlayerJump : MonoBehaviour
     #region 로컬 변수 선언
 
     private bool isJumping = false;
-    private bool isHoldJump = false;
+    [SerializeField] private bool isHoldJump = false;
+    [SerializeField] private float jumpCheckTime;
+    private float wallJumpCheckTime;
+    private bool isBufferFull;
+    private float bufferCheckTime;
 
     #endregion
 
@@ -81,13 +82,24 @@ public class PlayerJump : MonoBehaviour
     {
         if (playerBase.HasWallJumped)
             CheckWallJumpTime();
+
         if (playerBase.HasJumped)
             CheckJumpTime();
+
+        if (isBufferFull)
+            CheckBufferTime();
+
         CheckCanWallJump();
     }
 
     void FixedUpdate()
     {
+        if (isBufferFull && playerBase.OnGround)
+        {
+            SetJumpVector();
+            return;
+        }
+
         // 점프 시 벡터 확정 적용 후 초기화를 위한 구문
         if (isJumping)
         {
@@ -210,6 +222,17 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
+    private void CheckBufferTime()
+    {
+        bufferCheckTime += Time.deltaTime;
+
+        if (bufferCheckTime > bufferResetTime)
+        {
+            isBufferFull = false;
+            bufferCheckTime = 0;
+        }
+    }
+
     /// <summary>
     /// <para>
     /// 작성자 : 조우석
@@ -241,6 +264,20 @@ public class PlayerJump : MonoBehaviour
         return wallJumpVector;
     }
 
+    private void SetJumpVector()
+    {
+        jumpVector = new Vector2(0, jumpPower);
+        isJumping = true;
+        playerBase.HasJumped = true;
+        isBufferFull = false;
+    }
+
+    private void AddInputBuffer()
+    {
+        isBufferFull = true;
+        bufferCheckTime = 0;
+    }
+
     /// <summary>
     /// <para>
     /// 작성자 : 조우석
@@ -254,31 +291,39 @@ public class PlayerJump : MonoBehaviour
     /// </summary>
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed && playerBase.OnGround)
+        if (context.performed)
         {
-            jumpVector = new Vector2(0, jumpPower);
-            isJumping = true;
             isHoldJump = true;
-            playerBase.HasJumped = true;
+            if (playerBase.OnGround)
+            {
+                SetJumpVector();
+            }
+            else
+            {
+                AddInputBuffer();
+            }
+
+            if (playerBase.CanWallJump)
+            {
+                jumpVector = new Vector2(wallJumpPowerVector.x * (playerBase.WallSide == 1 ? -1 : 1), wallJumpPowerVector.y);
+                wallJumpVector = jumpVector;
+                jumpCheckTime = 0;
+                Debug.Log($"{wallJumpVector}");
+                isJumping = true;
+                playerBase.HasWallJumped = true;
+                isHoldJump = true;
+            }
         }
 
-        if (context.performed && playerBase.CanWallJump)
-        {
-            jumpVector = new Vector2(wallJumpPowerVector.x * (playerBase.WallSide == 1 ? -1 : 1), wallJumpPowerVector.y);
-            wallJumpVector = jumpVector;
-            jumpCheckTime = 0;
-            Debug.Log($"{wallJumpVector}");
-            isJumping = true;
-            playerBase.HasWallJumped = true;
-            isHoldJump = true;
-        }
-
-        if (context.canceled && rb.velocity.y > 0f)
+        if (context.canceled)
         {
             isHoldJump = false;
-            jumpVector = new Vector2(0, 0);
-            if (!playerBase.HasJumped && !playerBase.HasWallJumped)
-                rb.velocity = new Vector2(rb.velocity.x, 0);
+            if (rb.velocity.y > 0f)
+            {
+                jumpVector = new Vector2(0, 0);
+                if (!playerBase.HasJumped && !playerBase.HasWallJumped)
+                    rb.velocity = new Vector2(rb.velocity.x, 0);
+            }
         }
     }
 }
