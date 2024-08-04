@@ -20,12 +20,6 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine("Spawn");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // YJK, TimeInterval마다 한 블록씩 스폰
     IEnumerator Spawn()
     {
@@ -35,6 +29,7 @@ public class SpawnManager : MonoBehaviour
             int direction = brickSpawner.RandomDirection();
             int startPos = -1;
             GameObject blockType = BrickList[Random.Range(0, BrickList.Length - 1)];
+
             if(direction < 2)
             {
                 startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().y);
@@ -43,8 +38,11 @@ public class SpawnManager : MonoBehaviour
             {
                 startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().x);
             }
+
             float speed = blockType.GetComponent<PlatformMove>().MoveSpeed.magnitude;
-            SpawnBrick(direction, startPos, speed, blockType);
+
+            GameObject go = SpawnBrick(direction, startPos, speed, blockType);
+
             brickSpawner.AddBrick(blockType, startPos, direction);
         }
     }

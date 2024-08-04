@@ -66,6 +66,8 @@ public class PlayerBase : MonoBehaviour
                                    && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0) 
                                    && !playerCollision.OnGround 
                                    && rb.velocity.y <= 0;
+
+    private bool endDash = false;
     
     #endregion
 
@@ -133,7 +135,6 @@ public class PlayerBase : MonoBehaviour
 
     #endregion
 
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -151,7 +152,14 @@ public class PlayerBase : MonoBehaviour
         // 대쉬 시 velocity를 고정하여 적용, 대쉬 끝나기 전까지 다른 움직임 차단
         if (playerDash.IsDashing)
         {
+            endDash = true;
             rb.velocity = playerDash.DashVector;
+            return;
+        }
+        else if (playerDash.IsUpDash && endDash)
+        {
+            endDash = false;
+            rb.velocity = Vector2.zero;
             return;
         }
 
