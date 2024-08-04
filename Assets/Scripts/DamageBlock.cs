@@ -28,7 +28,6 @@ public class DamageBlock : MonoBehaviour
             {
                 collision.gameObject.GetComponent<PlatformMove>().HP--;
                 GameObject.Find("GameManager").GetComponent<GameManager>().CurrentExp++;
-                Debug.Log(transform.rotation.eulerAngles);
                 switch (transform.rotation.eulerAngles.z)
                 {
                     case 0f:

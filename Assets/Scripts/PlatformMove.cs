@@ -86,4 +86,24 @@ public class PlatformMove : MonoBehaviour
             GameObject.Find("GameManager").GetComponent<GameManager>().CurrentExp += Exp;
         }
     }
+
+    private void OnDestroy()
+    {
+        switch (Direction)
+        {
+            case EnterDirection.East:
+                GameObject.Find("SpawnManager").GetComponent<BrickSpawner>().DeleteBrick(this.gameObject, start, 0);
+                break;
+            case EnterDirection.West:
+                GameObject.Find("SpawnManager").GetComponent<BrickSpawner>().DeleteBrick(this.gameObject, start, 1);
+                break;
+            case EnterDirection.North:
+                GameObject.Find("SpawnManager").GetComponent<BrickSpawner>().DeleteBrick(this.gameObject, start, 2);
+                break;
+            default:
+                GameObject.Find("SpawnManager").GetComponent<BrickSpawner>().DeleteBrick(this.gameObject, start, 3);
+                break;
+        }
+        Destroy(this.gameObject);
+    }
 }
