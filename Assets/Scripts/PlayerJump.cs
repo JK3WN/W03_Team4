@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 /// <para>
 /// ===========================================
 /// </para>
-/// 플레이어 점프 처리 및 중력 처리 클래스
+/// 플레이어 점프 및 중력 처리 클래스
 /// </summary>
 public class PlayerJump : MonoBehaviour
 {
@@ -79,6 +79,7 @@ public class PlayerJump : MonoBehaviour
             playerCollision = GetComponent<PlayerCollision>();
     }
 
+    // 점프에 대한 각종 타이머 계산
     void Update()
     {
         if (playerBase.HasWallJumped)
@@ -90,12 +91,14 @@ public class PlayerJump : MonoBehaviour
 
     void FixedUpdate()
     {
+        // 점프 시 벡터 확정 적용 후 초기화를 위한 구문
         if (isJumping)
         {
             isJumping = false;
             return;
         }
         jumpVector = Vector2.zero;
+
         MultiplyOnPlayerFall();
     }
 
@@ -122,12 +125,30 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 플레이어의 중력 계산 후 중력에 대한 벡터를 반환
+    /// </summary>
     public Vector2 GetGravityVector()
     {
         MultiplyOnPlayerFall();
         return gravityVector;
     }
 
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 널널한 벽점프 판정을 위해서 타이머를 통해서 플레이어의 벽점프 가능 시간을 계산
+    /// </summary>
     private void CheckCanWallJump()
     {
         if (playerBase.IsWallClimbing)
@@ -148,13 +169,15 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
-    public Vector2 LerpWallJumpVector(Vector2 moveVector)
-    {
-        wallJumpVector = Vector2.Lerp(wallJumpVector, moveVector, Time.fixedDeltaTime * wallJumpLerpFactor);
-        
-        return wallJumpVector;
-    }
-
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 타이머를 통해 벽점프 최소 지속시간 계산
+    /// </summary>
     private void CheckWallJumpTime()
     {
         jumpCheckTime += Time.deltaTime;
@@ -168,6 +191,15 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 타이머를 통해 점프 최소 지속시간 계산
+    /// </summary>
     private void CheckJumpTime()
     {
         jumpCheckTime += Time.deltaTime;
@@ -179,6 +211,37 @@ public class PlayerJump : MonoBehaviour
             playerBase.HasJumped = false;
             jumpCheckTime = 0f;
         }
+    }
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 점프 벡터를 반환
+    /// </summary>
+    public Vector2 GetJumpVector()
+    {
+        return jumpVector;
+    }
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 벽점프 벡터 계산 후 반환
+    /// 벽점프 벡터는 이동 벡터와 선형 보간을 통해서 자연스러운 벽점프 방향 전환 적용
+    /// </summary>
+    public Vector2 LerpWallJumpVector(Vector2 moveVector)
+    {
+        wallJumpVector = Vector2.Lerp(wallJumpVector, moveVector, Time.fixedDeltaTime * wallJumpLerpFactor);
+        
+        return wallJumpVector;
     }
 
     /// <summary>
@@ -220,10 +283,5 @@ public class PlayerJump : MonoBehaviour
             if (!playerBase.HasJumped && !playerBase.HasWallJumped)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
         }
-    }
-
-    public Vector2 GetJumpVector()
-    {
-        return jumpVector;
     }
 }

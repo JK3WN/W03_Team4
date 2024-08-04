@@ -34,7 +34,16 @@ public class PlayerWallClimb : MonoBehaviour
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
     }
-    
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 벽타기 시 벡터 반환
+    /// </summary>
     public Vector2 GetWallVector()
     {
         wallVector = new Vector2(rb.velocity.x, -wallSlowFallValue);
