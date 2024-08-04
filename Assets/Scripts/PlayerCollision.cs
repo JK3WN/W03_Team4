@@ -18,7 +18,7 @@ using UnityEngine;
 /// OnWall : 플레이어가 벽에 붙었는지 True/False 반환
 /// </para>
 /// <para>
-/// 어느 방향 벽에 붙었는지 반환
+/// WallSide : 어느 방향 벽에 붙었는지 반환
 /// </para>
 /// <para>
 /// 0 : 벽X | 1 : 오른쪽 | 2 : 왼쪽
@@ -74,7 +74,6 @@ public class PlayerCollision : MonoBehaviour
     private void Update()
     {
         CheckCollision();
-
 
         // YJK, 땅에 붙어있으면 땅 오브젝트를 GroundObject로
         if (onGround)
