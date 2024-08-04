@@ -83,8 +83,8 @@ public class SpawnManager : MonoBehaviour
         Vector2 moveVector = Vector2.zero;
         moveVector.x = moveVector.y = speed;
 
-        moveVector.x *= direction < 2 ? 1 : 0;
-        moveVector.y *= direction < 2 ? 0 : 1;
+        moveVector.x *= (direction < 2 ? 1 : 0) * (direction == 0 ? 1 : -1);
+        moveVector.y *= (direction < 2 ? 0 : 1) * (direction == 2 ? 1 : -1);
 
         brick.GetComponent<PlatformMove>().MoveSpeed = moveVector;
 
