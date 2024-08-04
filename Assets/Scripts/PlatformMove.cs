@@ -17,7 +17,7 @@ public class PlatformMove : MonoBehaviour
     [Header("Stats")] public int MaxHP = 1;
     public GameObject[] HPList;
     public ItemList Item;
-    public int Exp = 1, x = 1, y = 1;
+    public int Exp = 1, x = 1, y = 1, start;
 
     [Header("Current Status")]
     public int HP;
