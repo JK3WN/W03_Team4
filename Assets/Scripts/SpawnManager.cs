@@ -6,10 +6,16 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    public int lv = 0;
+    public float currTime = 0;
     public float TimeInterval = 1f;
     public float SpaceInterval = 1f;
     public GameObject[] MirrorList;
     public GameObject[] BrickList;
+
+    public float[] lvSec;
+    public int[] speedStartRangeNums;
+    public int[] speedEndRangeNums;
 
     public BrickSpawner brickSpawner;
 
@@ -18,6 +24,16 @@ public class SpawnManager : MonoBehaviour
     {
         if(brickSpawner == null) brickSpawner = GetComponent<BrickSpawner>();
         StartCoroutine("Spawn");
+    }
+
+    void Update()
+    {
+        currTime += Time.deltaTime;
+        if (currTime >= lvSec[lv])
+        {
+            lv++;
+            Debug.Log(lv);
+        }
     }
 
     // YJK, TimeInterval마다 한 블록씩 스폰
@@ -39,7 +55,7 @@ public class SpawnManager : MonoBehaviour
                 startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().x);
             }
 
-            float speed = blockType.GetComponent<PlatformMove>().MoveSpeed.magnitude;
+            float speed = Random.Range(speedStartRangeNums[lv], speedEndRangeNums[lv]);
 
             GameObject go = SpawnBrick(direction, startPos, speed, blockType);
 

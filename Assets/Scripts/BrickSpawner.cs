@@ -125,6 +125,7 @@ public class BrickSpawner : MonoBehaviour
         {
             sumX += brickX[i];
         }
+
         float randomXY = Random.Range(0, 1 / sumX + 1 / sumY);
         float randomLR = Random.Range(0.0f, 1.0f);
         // Y���̶��
@@ -167,7 +168,6 @@ public class BrickSpawner : MonoBehaviour
                 additionalBrickY[i] = 1;
                 for (int j = i; j < i + brickCount; j++)
                 {
-                    //Debug.Log("i : "+(rowSize - brickCount + 1)+"j : "+ (i + brickCount - 1));
                     // 블록 크기 만큼 합치기
                     additionalBrickY[i] += brickY[j];
                 }
@@ -198,7 +198,6 @@ public class BrickSpawner : MonoBehaviour
                 additionalBrickX[i] = 1;
                 for (int j  = i; j < i + brickCount; j++)
                 {
-                    //Debug.Log("i : " + (columnSize - brickCount + 1) + "j : " + (i + brickCount - 1));
                     additionalBrickX[i] += brickX[j];
                 }
             }

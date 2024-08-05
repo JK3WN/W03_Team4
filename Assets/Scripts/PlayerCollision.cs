@@ -4,29 +4,29 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>
-/// ÀÛ¼ºÀÚ : ½ÅÈ¿Áø
+/// ì‘ì„±ì : ì‹ íš¨ì§„
 /// <para>
 /// ===========================================
 /// </para>
 /// <para>
-/// ÇÃ·¹ÀÌ¾îÀÇ Ãæµ¹ Ã³¸® Å¬·¡½º
+/// í”Œë ˆì´ì–´ì˜ ì¶©ëŒ ì²˜ë¦¬ í´ë˜ìŠ¤
 /// </para>
 /// <para>
-/// OnGround : ÇÃ·¹ÀÌ¾î°¡ ¶¥¿¡ ÀÖ´ÂÁö True/False ¹İÈ¯
+/// OnGround : í”Œë ˆì´ì–´ê°€ ë•…ì— ìˆëŠ”ì§€ True/False ë°˜í™˜
 /// </para>
 /// <para>
-/// OnWall : ÇÃ·¹ÀÌ¾î°¡ º®¿¡ ºÙ¾ú´ÂÁö True/False ¹İÈ¯
+/// OnWall : í”Œë ˆì´ì–´ê°€ ë²½ì— ë¶™ì—ˆëŠ”ì§€ True/False ë°˜í™˜
 /// </para>
 /// <para>
-/// WallSide : ¾î´À ¹æÇâ º®¿¡ ºÙ¾ú´ÂÁö ¹İÈ¯
+/// WallSide : ì–´ëŠ ë°©í–¥ ë²½ì— ë¶™ì—ˆëŠ”ì§€ ë°˜í™˜
 /// </para>
 /// <para>
-/// 0 : º®X | 1 : ¿À¸¥ÂÊ | 2 : ¿ŞÂÊ
+/// 0 : ë²½X | 1 : ì˜¤ë¥¸ìª½ | 2 : ì™¼ìª½
 /// </para>
 /// </summary>
 public class PlayerCollision : MonoBehaviour
 {
-    #region ÀÎ½ºÆåÅÍ º¯¼ö ¼±¾ğ
+    #region ì¸ìŠ¤í™í„° ë³€ìˆ˜ ì„ ì–¸
     [Header("Layers")]
     public LayerMask groundLayer;
     public LayerMask wallLayer;
@@ -49,7 +49,7 @@ public class PlayerCollision : MonoBehaviour
     public Vector2 GroundVector;
     #endregion
 
-    #region ·ÎÄÃ º¯¼ö ¼±¾ğ
+    #region ë¡œì»¬ ë³€ìˆ˜ ì„ ì–¸
 
     private Color debugCollsiionColor = Color.green;
 
@@ -57,16 +57,16 @@ public class PlayerCollision : MonoBehaviour
 
     #endregion
 
-    #region ¿ÜºÎ ÂüÁ¶
+    #region ì™¸ë¶€ ì°¸ì¡°
 
-    // ¶¥À» ¹â¾Ò´ÂÁö ¹İÈ¯
+    // ë•…ì„ ë°Ÿì•˜ëŠ”ì§€ ë°˜í™˜
     public bool OnGround { get { return onGround; } }
 
-    // º®¿¡ ºÙ¾ú´ÂÁö ºÙÁö ¾Ê¾Ò´ÂÁö ¹İÈ¯
+    // ë²½ì— ë¶™ì—ˆëŠ”ì§€ ë¶™ì§€ ì•Šì•˜ëŠ”ì§€ ë°˜í™˜
     public bool OnWall { get { return onWall; } }
 
-    // ¾î´À º®¿¡ ºÙ¾ú´ÂÁö ¹İÈ¯
-    // 0 : º®¿¡ ºÙÁö ¾ÊÀ½ | 1 : ¿À¸¥ÂÊ º® | 2 : ¿ŞÂÊ º®
+    // ì–´ëŠ ë²½ì— ë¶™ì—ˆëŠ”ì§€ ë°˜í™˜
+    // 0 : ë²½ì— ë¶™ì§€ ì•ŠìŒ | 1 : ì˜¤ë¥¸ìª½ ë²½ | 2 : ì™¼ìª½ ë²½
     public int WallSide { get { return 0 + (onRightWall ? 1 : 0) + (onLeftWall ? 2 : 0); } }
 
     public bool IsDead
@@ -83,26 +83,23 @@ public class PlayerCollision : MonoBehaviour
     {
         CheckCollision();
 
-        // CWS, ºÙ¾îÀÖ´ø ¶¥ÀÇ ¼Ó·ÂÀ» ¹Ş¾Æ¿Í º¤ÅÍ¿¡ Àû¿ë
+        // CWS, ë¶™ì–´ìˆë˜ ë•…ì˜ ì†ë ¥ì„ ë°›ì•„ì™€ ë²¡í„°ì— ì ìš©
         if (onGround)
         {
             GroundVector = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer)
                 .gameObject.GetComponent<Rigidbody2D>().velocity;
         }
-
-        //Debug.Log($"{_centerCollisionCount}");
-
         //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
     }
 
     /// <summary>
     /// <para>
-    /// ÀÛ¼ºÀÚ : Á¶¿ì¼®
+    /// ì‘ì„±ì : ì¡°ìš°ì„
     /// </para>
     /// <para>
     /// ===========================================
     /// </para>
-    /// ºÙ¾îÀÖ´ø ¶¥ÀÇ º¤ÅÍÀÇ x ¼ººĞ¸¸ µû¿Í ¹İÈ¯
+    /// ë¶™ì–´ìˆë˜ ë•…ì˜ ë²¡í„°ì˜ x ì„±ë¶„ë§Œ ë”°ì™€ ë°˜í™˜
     /// </summary>
     public Vector2 GetGroundVector()
     {
@@ -123,17 +120,17 @@ public class PlayerCollision : MonoBehaviour
 
     /// <summary>
     /// <para>
-    /// ÀÛ¼ºÀÚ : ½ÅÈ¿Áø
+    /// ì‘ì„±ì : ì‹ íš¨ì§„
     /// </para>
     /// <para>
     /// ===========================================
     /// </para>
-    /// ÁÂ, ¿ì, ¶¥ Ãæµ¹ °¨Áö ¸Ş¼­µå
-    /// °¨ÁöµÈ Boolean °ªÀº ÀÎ½ºÆåÅÍ º¯¼ö¿¡ ÀúÀå
+    /// ì¢Œ, ìš°, ë•… ì¶©ëŒ ê°ì§€ ë©”ì„œë“œ
+    /// ê°ì§€ëœ Boolean ê°’ì€ ì¸ìŠ¤í™í„° ë³€ìˆ˜ì— ì €ì¥
     /// </summary>
     private void CheckCollision()
     {
-        // ¶¥, ¿ì, ÁÂ ¹æÇâ Collision check
+        // ë•…, ìš°, ì¢Œ ë°©í–¥ Collision check
         onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
         onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, wallLayer);
         onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, wallLayer);
