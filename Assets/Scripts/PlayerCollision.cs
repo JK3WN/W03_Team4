@@ -44,8 +44,10 @@ public class PlayerCollision : MonoBehaviour
     [Header("Collision Information")]
     public float collisionRadius = 0.25f;
     public Vector2 bottomOffset, rightOffset, leftOffset;
+    public float vectorLerpFactor;
 
     [Space]
+    [Header("Result Vector")]
     public Vector2 GroundVector;
     #endregion
 
@@ -89,7 +91,26 @@ public class PlayerCollision : MonoBehaviour
             GroundVector = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer)
                 .gameObject.GetComponent<Rigidbody2D>().velocity;
         }
-        //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
+
+        if (onWall)
+        {
+            if (onLeftWall)
+            {
+                GroundVector = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, wallLayer).gameObject.GetComponent<Rigidbody2D>().velocity;
+            }
+            else if (onRightWall)
+            {
+                GroundVector = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, wallLayer).gameObject.GetComponent<Rigidbody2D>().velocity;
+            }
+        }
+
+        if (!onGround && !onWall)
+        {
+            if (GroundVector.magnitude < 0.01)
+                GroundVector = Vector2.zero;
+            else
+                GroundVector = new Vector2(Mathf.Lerp(GroundVector.x, 0, Time.deltaTime * vectorLerpFactor), 0);
+        }
     }
 
     /// <summary>
@@ -99,11 +120,25 @@ public class PlayerCollision : MonoBehaviour
     /// <para>
     /// ===========================================
     /// </para>
-    /// 붙어있던 땅의 벡터의 x 성분만 따와 반환
+    /// 붙어있던 땅 벡터의 x 성분만 따와 반환
     /// </summary>
     public Vector2 GetGroundVector()
     {
         return new Vector2(GroundVector.x, 0);
+    }
+
+    /// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 붙어있던 벽 벡터의 y 성분만 따와 반환
+    /// </summary>
+    public Vector2 GetWallVector()
+    {
+        return new Vector2(0, GroundVector.y);
     }
 
     void OnDrawGizmos()
@@ -134,7 +169,7 @@ public class PlayerCollision : MonoBehaviour
         onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
         onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, wallLayer);
         onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, wallLayer);
-        
+
         onWall = onRightWall || onLeftWall;
 
         _centerCollisionCount = Physics2D.OverlapCircleAll(transform.position, collisionRadius / 2, groundLayer | wallLayer).Length;
