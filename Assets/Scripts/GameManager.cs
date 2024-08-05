@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static bool isPlaying = true;
     private float startTime;
 
-    public GameObject player, floor, spikeFloor, gameOverPanel, _gameOverFirst, tipText;
+    public GameObject player, floor, spikeFloor, gameOverPanel, _gameOverFirst, tipText, restartButton, mainMenuButon;
     public float changeSpeed = 0.1f;
     public GameObject[] DashGauge, DashSlots;
     public int[] EXPNeeded;
@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
             gameOverPanel.SetActive(true);
             recordText.text = timerText.text;
             Destroy(player);
+            StartCoroutine("ShowButton");
         }
     }
 
@@ -89,6 +90,13 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
             tipText.transform.position = new Vector3(tipText.transform.position.x - 2f, tipText.transform.position.y, 0f);
         }
+    }
+
+    IEnumerator ShowButton()
+    {
+        yield return new WaitForSeconds(3f);
+        restartButton.SetActive(true);
+        mainMenuButon.SetActive(true);
     }
 
     public void RestartPressed()
