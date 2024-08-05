@@ -26,6 +26,8 @@ public class BrickSpawner : MonoBehaviour
     public int[] additionalBrickX = new int[columnSize];
     public int[] additionalBrickY = new int[rowSize];
 
+    public float[] percents;
+
     /// <summary>
     /// <para>
     /// 작성자 : 이승철
@@ -164,9 +166,9 @@ public class BrickSpawner : MonoBehaviour
             }
 
             // 그 확률 크기 값 범위에서 랜덤으로 값을 뽑음
-            float randX = Random.Range(0.0f, percents[15 - brickCount + 1]);
+            float randX = Random.Range(0.0f, percents[rowSize - brickCount + 1]);
             // 거꾸로 그 값 범위에 있나 점검하며 뽑힌 값 확인하고 그 값으로 설정
-            for (int i = 15 - brickCount + 1; i >= 1; i--)
+            for (int i = rowSize - brickCount + 1; i >= 1; i--)
             {
                 if (randX > percents[i])
                 {
