@@ -104,6 +104,7 @@ public class SpawnManager : MonoBehaviour
     {
         while (GameManager.isPlaying)
         {
+            Debug.Log("스폰 실행");
             yield return new WaitForSeconds(TimeInterval);
             int direction = brickSpawner.RandomDirection();
             int startPos = -1;
@@ -130,6 +131,7 @@ public class SpawnManager : MonoBehaviour
     {
         while (GameManager.isPlaying)
         {
+            Debug.Log("웨이브 실행");
             int wave = Random.Range(0, 3);
             switch (wave)
             {
