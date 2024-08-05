@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4746759685584461411}
   - component: {fileID: 905712140499374474}
   - component: {fileID: 2116195418992321099}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: B12
-  m_TagString: Untagged
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,7 +47,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8357806872111199565}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: {x: 0, y: 0}
   Direction: 0
-  MaxHP: 1
+  MaxHP: 5
   HPList:
   - {fileID: 2230141427247544284}
   - {fileID: 4615207236720048321}

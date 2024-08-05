@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 210329338738140415}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 3409965454115660764}
   - {fileID: 4795824340321922227}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6417972259663692677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,7 +70,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 210329338738140415}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -128,32 +128,32 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 7345752182597820790}
     m_ColliderPaths:
-    - - X: 30000008
-        Y: -19999996
-      - X: 30000002
-        Y: 4
-      - X: -30000002
-        Y: -5
-      - X: -29999998
-        Y: -20000004
+    - - X: 30000000
+        Y: 20000000
+      - X: -30000000
+        Y: 20000000
+      - X: -30000000
+        Y: 0
+      - X: 30000000
+        Y: 0
   - m_Collider: {fileID: 8648277667937365982}
     m_ColliderPaths:
-    - - X: 30000000
-        Y: 5
-      - X: 29999996
-        Y: 20000004
-      - X: 9999995
-        Y: 20000002
-      - X: 9999999
-        Y: 1
+    - - X: -10000000
+        Y: 0
+      - X: -30000000
+        Y: 0
+      - X: -30000000
+        Y: -20000000
+      - X: -10000000
+        Y: -20000000
   m_CompositePaths:
     m_Paths:
-    - - {x: -2.9999998, y: -1.9999713}
-      - {x: 3.000001, y: -1.9999704}
-      - {x: 2.9999704, y: 2.0000005}
-      - {x: 0.9999995, y: 1.9999708}
-      - {x: 0.9999705, y: 0.0000001}
-      - {x: -3.0000002, y: -0.0000298}
+    - - {x: -1.0000293, y: -2}
+      - {x: -0.9999706, y: 0}
+      - {x: 3, y: 0.000029300001}
+      - {x: 2.999971, y: 2}
+      - {x: -3, y: 1.9999708}
+      - {x: -2.999971, y: -2}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -176,11 +176,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 551545257780211447, guid: 00bd729d3e132134e8ddbfda1984cfe8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 551545257780211447, guid: 00bd729d3e132134e8ddbfda1984cfe8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 551545257780211447, guid: 00bd729d3e132134e8ddbfda1984cfe8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -262,7 +262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8531543328322120995, guid: 6e048f31ec07eec4db1b12a753cc94b2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8531543328322120995, guid: 6e048f31ec07eec4db1b12a753cc94b2, type: 3}
       propertyPath: m_LocalPosition.z
