@@ -17,18 +17,14 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class BrickSpawner : MonoBehaviour
 {
-    #region 인스텍터 변수 선언
-    [Header("현재 블록 X, Y")]
-    [SerializeField] int[] brickX = new int[24];
-    [SerializeField] int[] brickY = new int[15];
+    private const int rowSize = 15;
+    private const int columnSize = 24;
 
-    [Header("블록크기만큼 합치는 배열")]
-    [SerializeField] int[] additionalBrickX = new int[24];
-    [SerializeField] int[] additionalBrickY = new int[15];
+    public int[] brickX = new int[columnSize];
+    public int[] brickY = new int[rowSize];
 
-    [Header("확률 배열")]
-    [SerializeField] float[] percents = new float[25];
-    #endregion
+    public int[] additionalBrickX = new int[columnSize];
+    public int[] additionalBrickY = new int[rowSize];
 
     /// <summary>
     /// <para>
@@ -105,17 +101,16 @@ public class BrickSpawner : MonoBehaviour
         // X, Y 합
         float sumX = 0;
         float sumY = 0;
-        for(int i = 0; i< 15; i++)
+        for (int i = 0; i < rowSize; i++)
         {
             sumY += brickY[i];
         }
 
-        for(int i = 0; i<24; i++)
+        for (int i = 0; i < columnSize; i++)
         {
             sumX += brickX[i];
         }
-
-        float randomXY = Random.Range(0, 1/sumX+1/sumY);
+        float randomXY = Random.Range(0, 1 / sumX + 1 / sumY);
         float randomLR = Random.Range(0.0f, 1.0f);
         // Y���̶��
         if (randomXY <= 1/sumY)
@@ -151,7 +146,7 @@ public class BrickSpawner : MonoBehaviour
         int index = 0;
         if (direction == 0 || direction == 1)
         {
-            for (int i = 0; i < 15 - brickCount + 1; i++)
+            for (int i = 0; i < rowSize - brickCount + 1; i++)
             {
                 // 이전에 값이 남아 있을 수 있으므로 초기값 1로 설정
                 additionalBrickY[i] = 1;
@@ -162,7 +157,7 @@ public class BrickSpawner : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < 15 - brickCount + 1; i++)
+            for (int i = 0; i < rowSize  - brickCount + 1; i++)
             {
                 // 피보나치 수열처럼 각 확률의 합을 구함
                 percents[i + 1] = percents[i] + (1f / (float)additionalBrickY[i]);
@@ -182,7 +177,7 @@ public class BrickSpawner : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < 24 - brickCount + 1; i++)
+            for (int i = 0; i < columnSize - brickCount + 1; i++)
             {
                 additionalBrickX[i] = 1;
                 for (int j  = i; j < i + brickCount - 1; j++)
@@ -191,17 +186,17 @@ public class BrickSpawner : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < 24 - brickCount + 1; i++)
+            for (int i = 0; i < columnSize - brickCount + 1; i++)
             {
                 percents[i + 1] = percents[i] + (1f / additionalBrickX[i]);
             }
 
-            float randX = Random.Range(0, percents[24 - brickCount + 1]);
-            for (int i = 24 - brickCount + 1; i >= 1; i--)
+            float randX = Random.Range(0, percents[columnSize - brickCount + 1]);
+            for (int i = columnSize - brickCount + 1; i >= 1; i--)
             {
                 if (randX > percents[i])
                 {
-                    index =  i;
+                    index = i;
                     break;
                 }
             }
