@@ -12,8 +12,7 @@ public class GameManager : MonoBehaviour
     public static bool isPlaying = true;
     private float startTime;
 
-    public GameObject player, floor, spikeFloor, gameOverPanel, _gameOverFirst;
-    public InputActionMap uiActionMap;
+    public GameObject player, floor, spikeFloor, gameOverPanel, _gameOverFirst, tipText;
     public float changeSpeed = 0.1f;
     public GameObject[] DashGauge, DashSlots;
     public int[] EXPNeeded;
@@ -28,6 +27,7 @@ public class GameManager : MonoBehaviour
         CurrentExp = 0;
         startTime = Time.time;
         StartCoroutine("RiseSpike");
+        StartCoroutine("MoveTip");
         EventSystem.current.SetSelectedGameObject(_gameOverFirst);
     }
 
@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
         {
             gameOverPanel.SetActive(true);
             recordText.text = timerText.text;
+            Destroy(player);
         }
     }
 
@@ -79,6 +80,15 @@ public class GameManager : MonoBehaviour
             floor.transform.position = new Vector3(floor.transform.position.x, floor.transform.position.y - changeSpeed, 0f);
         }
         Destroy(floor);
+    }
+
+    IEnumerator MoveTip()
+    {
+        while (isPlaying)
+        {
+            yield return new WaitForSeconds(0.01f);
+            tipText.transform.position = new Vector3(tipText.transform.position.x - 2f, tipText.transform.position.y, 0f);
+        }
     }
 
     public void RestartPressed()

@@ -201,6 +201,6 @@ public class PlayerBase : MonoBehaviour
         }
 
         // 최종 벡터 적용
-        rb.velocity = FinalVector;
+        if(GameManager.isPlaying) rb.velocity = FinalVector;
     }
 }

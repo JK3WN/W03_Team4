@@ -29,7 +29,7 @@ public class Attack : MonoBehaviour
     /// </summary>
     public void PlayerAttack(InputAction.CallbackContext context)
     {
-        if (!isAttacking)
+        if (!isAttacking && GameManager.isPlaying)
         {
             StartCoroutine(OnAttack());
         }
