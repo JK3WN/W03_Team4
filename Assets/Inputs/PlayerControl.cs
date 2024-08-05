@@ -198,6 +198,129 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UIAction"",
+            ""id"": ""4f673371-578e-42f2-8aba-b32d916f8abc"",
+            ""actions"": [
+                {
+                    ""name"": ""Navigate"",
+                    ""type"": ""Value"",
+                    ""id"": ""fa405530-def9-4fe0-bc24-3632dca5f53e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""22de0aa8-1751-4bde-8a57-2f3130c89c32"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""d56c783e-8141-4348-bac4-01e14af901f1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""9fd0ad99-44e1-469c-8208-9861973494b1"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""6cd2c494-44c1-4e22-9c86-ff9b4206446d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""da6ca005-1dd9-4fe1-ab23-40b0d906fb89"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""32b5eeba-636b-4877-9742-1679b7231f8c"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""bd949e53-2c56-4052-823f-5b75b6511b56"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1f896b03-f61c-4b8a-b8ad-d104d04fbb77"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9640bb39-5fcb-49b3-8139-6c26d87dce76"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8009f602-f9a6-42b8-ad80-01084cc685ab"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -231,6 +354,11 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         m_PlayerMove_Jump = m_PlayerMove.FindAction("Jump", throwIfNotFound: true);
         m_PlayerMove_Dash = m_PlayerMove.FindAction("Dash", throwIfNotFound: true);
         m_PlayerMove_Attack = m_PlayerMove.FindAction("Attack", throwIfNotFound: true);
+        // UIAction
+        m_UIAction = asset.FindActionMap("UIAction", throwIfNotFound: true);
+        m_UIAction_Navigate = m_UIAction.FindAction("Navigate", throwIfNotFound: true);
+        m_UIAction_Submit = m_UIAction.FindAction("Submit", throwIfNotFound: true);
+        m_UIAction_Cancel = m_UIAction.FindAction("Cancel", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -358,6 +486,68 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         }
     }
     public PlayerMoveActions @PlayerMove => new PlayerMoveActions(this);
+
+    // UIAction
+    private readonly InputActionMap m_UIAction;
+    private List<IUIActionActions> m_UIActionActionsCallbackInterfaces = new List<IUIActionActions>();
+    private readonly InputAction m_UIAction_Navigate;
+    private readonly InputAction m_UIAction_Submit;
+    private readonly InputAction m_UIAction_Cancel;
+    public struct UIActionActions
+    {
+        private @PlayerControl m_Wrapper;
+        public UIActionActions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Navigate => m_Wrapper.m_UIAction_Navigate;
+        public InputAction @Submit => m_Wrapper.m_UIAction_Submit;
+        public InputAction @Cancel => m_Wrapper.m_UIAction_Cancel;
+        public InputActionMap Get() { return m_Wrapper.m_UIAction; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActionActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActionActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionActionsCallbackInterfaces.Add(instance);
+            @Navigate.started += instance.OnNavigate;
+            @Navigate.performed += instance.OnNavigate;
+            @Navigate.canceled += instance.OnNavigate;
+            @Submit.started += instance.OnSubmit;
+            @Submit.performed += instance.OnSubmit;
+            @Submit.canceled += instance.OnSubmit;
+            @Cancel.started += instance.OnCancel;
+            @Cancel.performed += instance.OnCancel;
+            @Cancel.canceled += instance.OnCancel;
+        }
+
+        private void UnregisterCallbacks(IUIActionActions instance)
+        {
+            @Navigate.started -= instance.OnNavigate;
+            @Navigate.performed -= instance.OnNavigate;
+            @Navigate.canceled -= instance.OnNavigate;
+            @Submit.started -= instance.OnSubmit;
+            @Submit.performed -= instance.OnSubmit;
+            @Submit.canceled -= instance.OnSubmit;
+            @Cancel.started -= instance.OnCancel;
+            @Cancel.performed -= instance.OnCancel;
+            @Cancel.canceled -= instance.OnCancel;
+        }
+
+        public void RemoveCallbacks(IUIActionActions instance)
+        {
+            if (m_Wrapper.m_UIActionActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActionActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActionActions @UIAction => new UIActionActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -382,5 +572,11 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+    }
+    public interface IUIActionActions
+    {
+        void OnNavigate(InputAction.CallbackContext context);
+        void OnSubmit(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
     }
 }
