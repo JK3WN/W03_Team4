@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1089122110989754387}
   - component: {fileID: 627520047969136125}
   m_Layer: 6
-  m_Name: LBlock
+  m_Name: B8
   m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
