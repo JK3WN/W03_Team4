@@ -98,19 +98,19 @@ public class SpawnManager : MonoBehaviour
         switch (direction)
         {
             case 0:
-                GameObject brick0 = GameObject.Instantiate(blockType, new Vector3(MirrorList[0].transform.position.x - (float)blockType.GetComponent<PlatformMove>().x / 2, MirrorList[0].transform.position.y + MirrorList[0].transform.lossyScale.y / 2 - (float)blockType.GetComponent<PlatformMove>().y / 2 - startPos * SpaceInterval, 0), Quaternion.identity);
+                GameObject brick0 = GameObject.Instantiate(blockType, new Vector3(MirrorList[0].transform.position.x - (float)blockType.GetComponent<PlatformMove>().x / 2, MirrorList[0].transform.position.y + MirrorList[0].transform.lossyScale.y / 2 - (float)blockType.GetComponent<PlatformMove>().y / 2 - startPos * SpaceInterval, 0), blockType.transform.rotation);
                 brick0.GetComponent<PlatformMove>().MoveSpeed = new Vector2(speed, 0);
                 break;
             case 1:
-                GameObject brick1 = GameObject.Instantiate(blockType, new Vector3(MirrorList[1].transform.position.x + (float)blockType.GetComponent<PlatformMove>().x / 2, MirrorList[1].transform.position.y + MirrorList[1].transform.lossyScale.y / 2 - (float)blockType.GetComponent<PlatformMove>().y / 2 - startPos * SpaceInterval, 0), Quaternion.identity);
+                GameObject brick1 = GameObject.Instantiate(blockType, new Vector3(MirrorList[1].transform.position.x + (float)blockType.GetComponent<PlatformMove>().x / 2, MirrorList[1].transform.position.y + MirrorList[1].transform.lossyScale.y / 2 - (float)blockType.GetComponent<PlatformMove>().y / 2 - startPos * SpaceInterval, 0), blockType.transform.rotation);
                 brick1.GetComponent<PlatformMove>().MoveSpeed = new Vector2(-speed, 0);
                 break;
             case 2:
-                GameObject brick2 = GameObject.Instantiate(blockType, new Vector3(MirrorList[2].transform.position.x - MirrorList[2].transform.lossyScale.x / 2 + (float)blockType.GetComponent<PlatformMove>().x / 2 + startPos * SpaceInterval, MirrorList[2].transform.position.y - (float)blockType.GetComponent<PlatformMove>().y / 2, 0), Quaternion.identity);
+                GameObject brick2 = GameObject.Instantiate(blockType, new Vector3(MirrorList[2].transform.position.x - MirrorList[2].transform.lossyScale.x / 2 + (float)blockType.GetComponent<PlatformMove>().x / 2 + startPos * SpaceInterval, MirrorList[2].transform.position.y - (float)blockType.GetComponent<PlatformMove>().y / 2, 0), blockType.transform.rotation);
                 brick2.GetComponent<PlatformMove>().MoveSpeed = new Vector2(0, speed);
                 break;
             case 3:
-                GameObject brick3 = GameObject.Instantiate(blockType, new Vector3(MirrorList[3].transform.position.x - MirrorList[3].transform.lossyScale.x / 2 + (float)blockType.GetComponent<PlatformMove>().x / 2 + startPos * SpaceInterval, MirrorList[3].transform.position.y + (float)blockType.GetComponent<PlatformMove>().y / 2, 0), Quaternion.identity);
+                GameObject brick3 = GameObject.Instantiate(blockType, new Vector3(MirrorList[3].transform.position.x - MirrorList[3].transform.lossyScale.x / 2 + (float)blockType.GetComponent<PlatformMove>().x / 2 + startPos * SpaceInterval, MirrorList[3].transform.position.y + (float)blockType.GetComponent<PlatformMove>().y / 2, 0), blockType.transform.rotation);
                 brick3.GetComponent<PlatformMove>().MoveSpeed = new Vector2(0, -speed);
                 break;
             default:
@@ -126,10 +126,12 @@ public class SpawnManager : MonoBehaviour
         GameObject blockType = gameObjectGrid.grid[lv].array[brickIndex];
         if (direction < 2)
         {
+            if (blockType == null) return;
             startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().y);
         }
         else
         {
+            if (blockType == null) return;
             startPos = brickSpawner.RandomBrickNum(direction, blockType.GetComponent<PlatformMove>().x);
         }
         float speed = Random.Range(speedStartRangeNums[lv], speedEndRangeNums[lv]);

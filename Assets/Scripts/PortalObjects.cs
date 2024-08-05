@@ -32,7 +32,7 @@ public class PortalObjects : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // YJK, Direction 값 동일한 오브젝트 닿으면 Exit 쪽에 이 오브젝트 생성
-        if (collision.gameObject.CompareTag("Platform") && Direction == collision.gameObject.GetComponent<PlatformMove>().Direction)
+        if (collision.gameObject.CompareTag("Platform") && collision.gameObject.GetComponent<PlatformMove>() && Direction == collision.gameObject.GetComponent<PlatformMove>().Direction)
         {
             GameObject Clone = GameObject.Instantiate(collision.gameObject, collision.gameObject.transform.position + Exit.transform.position - transform.position, Quaternion.identity);
             Clone.name = collision.gameObject.name;
@@ -43,7 +43,7 @@ public class PortalObjects : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         // YJK, Direction 값 동일한 오브젝트와의 충돌 끝나면 그 오브젝트 파괴
-        if (collision.gameObject.CompareTag("Platform") && Direction == collision.gameObject.GetComponent<PlatformMove>().Direction)
+        if (collision.gameObject.CompareTag("Platform") && collision.gameObject.GetComponent<PlatformMove>() && Direction == collision.gameObject.GetComponent<PlatformMove>().Direction)
         {
             Destroy(collision.gameObject);
         }
