@@ -891,7 +891,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: {x: 0, y: 0}
   Direction: 0
-  MaxHP: 1
+  MaxHP: 5
   HPList:
   - {fileID: 1061595005094997047}
   - {fileID: 5335303565778809839}

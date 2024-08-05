@@ -55,8 +55,8 @@ MonoBehaviour:
   - {fileID: 2304498091817421437}
   Item: 0
   Exp: 1
-  x: 4
-  y: 6
+  x: 2
+  y: 3
   start: 0
   HP: 0
   isTouched: 0
@@ -123,9 +123,37 @@ CompositeCollider2D:
   m_GeometryType: 1
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 7785485181371376487}
+    m_ColliderPaths:
+    - - X: 30000000
+        Y: 0
+      - X: -10000000
+        Y: 0
+      - X: -10000000
+        Y: -20000000
+      - X: 30000000
+        Y: -20000000
+  - m_Collider: {fileID: 1992455727703200380}
+    m_ColliderPaths:
+    - - X: 10000000
+        Y: 20000000
+      - X: -30000000
+        Y: 20000000
+      - X: -30000000
+        Y: 0
+      - X: 10000000
+        Y: 0
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 2.999971, y: -2}
+      - {x: 2.999971, y: 0}
+      - {x: 1, y: 0.0000294}
+      - {x: 0.99997073, y: 2}
+      - {x: -3, y: 1.9999708}
+      - {x: -2.999971, y: 0}
+      - {x: -1, y: -0.0000294}
+      - {x: -0.99997073, y: -2}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -145,6 +173,10 @@ PrefabInstance:
     - target: {fileID: 1165070128051251132, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.477
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525463949369214647, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+      propertyPath: m_UsedByComposite
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5954158788972174362, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
       propertyPath: m_Name
@@ -197,6 +229,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+--- !u!61 &1992455727703200380 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4525463949369214647, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+  m_PrefabInstance: {fileID: 2696304402973332683}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2304498091817421437 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4219884256766975670, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
@@ -215,6 +252,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6560872263865880359}
     m_Modifications:
+    - target: {fileID: 4525463949369214647, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+      propertyPath: m_UsedByComposite
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5954158788972174362, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
       propertyPath: m_Name
       value: B4-90Rota
@@ -270,5 +311,10 @@ PrefabInstance:
 --- !u!4 &3261835378502874841 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9188021670407787273, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+  m_PrefabInstance: {fileID: 5964513003876935120}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &7785485181371376487 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4525463949369214647, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
   m_PrefabInstance: {fileID: 5964513003876935120}
   m_PrefabAsset: {fileID: 0}

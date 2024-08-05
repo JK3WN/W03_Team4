@@ -762,7 +762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: {x: 0, y: 0}
   Direction: 0
-  MaxHP: 1
+  MaxHP: 5
   HPList:
   - {fileID: 756344240134869188}
   - {fileID: 8983727511527370580}
@@ -771,8 +771,8 @@ MonoBehaviour:
   - {fileID: 5048500508793118606}
   Item: 0
   Exp: 1
-  x: 4
-  y: 10
+  x: 2
+  y: 5
   start: 0
   HP: 0
   isTouched: 0

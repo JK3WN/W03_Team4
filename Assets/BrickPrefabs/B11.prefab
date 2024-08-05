@@ -153,8 +153,8 @@ MonoBehaviour:
   - {fileID: 1668747316878531142}
   Item: 0
   Exp: 1
-  x: 6
-  y: 4
+  x: 3
+  y: 2
   start: 0
   HP: 0
   isTouched: 0
