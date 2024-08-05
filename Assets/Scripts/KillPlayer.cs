@@ -21,6 +21,7 @@ public class KillPlayer : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Death");
+            GameManager.isPlaying = false;
         }
     }
 }
