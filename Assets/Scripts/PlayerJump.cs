@@ -68,7 +68,7 @@ public class PlayerJump : MonoBehaviour
     private bool isBufferFull;                  // 선입력 버퍼 적용 bool
     private float bufferCheckTime;              // 버퍼 초기화 타이머용 변수
     private int recentWallDir;                  // 최근에 닿은 벽 방향 저장 변수
-    [SerializeField]private float coyoteCheckTime;              // 코요테 타임 타이머용 변수
+    private float coyoteCheckTime;              // 코요테 타임 타이머용 변수
     private bool hasJumped;                     // 점프를 했었는지 판단용 bool / 점프 시 True, 땅이나 벽에 닿으면 False
 
     #endregion
@@ -127,8 +127,6 @@ public class PlayerJump : MonoBehaviour
 
     void FixedUpdate()
     {
-        
-
         // 점프 시 벡터 확정 적용 후 초기화를 위한 구문
         if (mustApplyJumpVector)
         {

@@ -176,7 +176,6 @@ public class PlayerBase : MonoBehaviour
             return;
         }
 
-        FinalVector += playerCollision.GetGroundVector();
         // 플레이어가 벽을 잡고 있으면 매달리기와 벽점프에 대한 벡터만 적용
         if (isWallClimbing)
         {
@@ -196,9 +195,7 @@ public class PlayerBase : MonoBehaviour
                 FinalVector += horizontalMove.GetMoveVector();
             }
 
-            if (playerJump.GetJumpVector().y > 0.01f)
-                Debug.Log($"{playerJump.GetJumpVector()}");
-
+            FinalVector += playerCollision.GetGroundVector();
             FinalVector += playerJump.GetJumpVector();
             FinalVector += playerJump.GetGravityVector();
         }
