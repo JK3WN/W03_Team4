@@ -138,6 +138,7 @@ public class PlayerJump : MonoBehaviour
         // input buffer에 선입력된 점프가 있는 상태에서 땅에 닿으면 점프
         if (isBufferFull && playerBase.OnGround && !hasJumped)
         {
+            Debug.Log("asdf");
             SetJumpVector();
             // 다음 구문에서 벡터 확정 후 초기화를 막기 위해서 return
         }
