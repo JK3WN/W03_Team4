@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static bool isPlaying = true;
     private float startTime;
 
-    public GameObject player, floor, spikeFloor, gameOverPanel, _gameOverFirst, tipText, restartButton, mainMenuButon;
+    public GameObject player, floor, spikeFloor, spikeCeiling, gameOverPanel, _gameOverFirst, tipText, restartButton, mainMenuButon;
     public float changeSpeed = 0.1f;
     public GameObject[] DashGauge, DashSlots;
     public int[] EXPNeeded;
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         isPlaying = true;
         CurrentExp = 0;
         startTime = Time.time;
-        StartCoroutine("RiseSpike");
+        StartCoroutine("IE_Intro");
         StartCoroutine("MoveTip");
         EventSystem.current.SetSelectedGameObject(_gameOverFirst);
     }
@@ -72,15 +72,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator RiseSpike()
+    IEnumerator IE_RiseSpike()
     {
-        while (isPlaying && spikeFloor.transform.position.y < -19.5f)
+        while (isPlaying && spikeFloor.transform.position.y < -20f)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.05f);
             spikeFloor.transform.position = new Vector3 (spikeFloor.transform.position.x, spikeFloor.transform.position.y + changeSpeed, 0f);
-            floor.transform.position = new Vector3(floor.transform.position.x, floor.transform.position.y - changeSpeed, 0f);
+        }
+    }
+
+    IEnumerator IE_FallSpike()
+    {
+        while (isPlaying && spikeCeiling.transform.position.y > 20f)
+        {
+            yield return new WaitForSeconds(0.05f);
+            spikeCeiling.transform.position = new Vector3(spikeCeiling.transform.position.x, spikeCeiling.transform.position.y - changeSpeed, 0f);
+        }
+    }
+
+    IEnumerator IE_ShrinkFloor()
+    {
+        while (isPlaying && floor.transform.localScale.x > 0.01f)
+        {
+            yield return new WaitForSeconds(0.05f);
+            floor.transform.localScale = new Vector3(floor.transform.localScale.x - 0.15f, floor.transform.localScale.y, floor.transform.localScale.z);
         }
         Destroy(floor);
+    }
+
+    IEnumerator IE_Intro()
+    {
+        yield return new WaitForSeconds(2f);
+        StartCoroutine("IE_RiseSpike");
+        StartCoroutine("IE_FallSpike");
+        yield return new WaitForSeconds(1.5f);
+        StartCoroutine("IE_ShrinkFloor");
     }
 
     IEnumerator MoveTip()
@@ -94,7 +120,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ShowButton()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         restartButton.SetActive(true);
         mainMenuButon.SetActive(true);
     }

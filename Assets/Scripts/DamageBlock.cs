@@ -40,6 +40,7 @@ public class DamageBlock : MonoBehaviour
                         break;
                     case 180f:
                         //player.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * knockback, ForceMode2D.Impulse);
+                        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                         player.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.up * knockback;
                         break;
                     case 270f:
@@ -66,6 +67,7 @@ public class DamageBlock : MonoBehaviour
                     break;
                 case 180f:
                     //player.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * knockback, ForceMode2D.Impulse);
+                    player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                     player.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.up * knockback;
                     break;
                 case 270f:
