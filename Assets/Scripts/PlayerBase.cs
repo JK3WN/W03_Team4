@@ -18,10 +18,10 @@ using UnityEngine;
 /// CanWallJump : 벽 점프가 가능한지에 대한 판정 True/False 반환
 /// </para>
 /// <para>
-/// HasJumped : 플레이어가 점프 상태인지 True/False 반환
+/// IsJumping : 플레이어가 점프 상태인지 True/False 반환
 /// </para>
 /// <para>
-/// HasWallJumped : 플레이어가 벽점프 상태인지 True/False 반환
+/// IsWallJumping : 플레이어가 벽점프 상태인지 True/False 반환
 /// </para>
 /// <para>
 /// IsWallClimbing : 벽에 매달렸는지에 대한 판전 True/False 반환
@@ -58,8 +58,8 @@ public class PlayerBase : MonoBehaviour
     [Header("Booleans")] 
     [SerializeField] private bool canWallJump = false;
     [SerializeField] private bool canCoyoteJump = false;
-    [SerializeField] private bool hasJumped = false;
-    [SerializeField] private bool hasWallJumped = false;
+    [SerializeField] private bool isJumping = false;
+    [SerializeField] private bool isWallJumping = false;
 
     // 플레이어가 벽에 붙음 && 플레이어가 벽 방향으로 키보드 누름
     // && 플레이어가 땅에 붙어있지 않음 && 플레이어가 상승중이 아닐 때
@@ -100,27 +100,27 @@ public class PlayerBase : MonoBehaviour
     }
 
     // 현재 점프 상태인지 반환
-    public bool HasJumped
+    public bool IsJumping
     {
-        get { return hasJumped; }
+        get { return isJumping; }
         set
         {
-            if (value != hasJumped)
+            if (value != isJumping)
             {
-                hasJumped = value;
+                isJumping = value;
             }
         }
     }
 
     // 현재 벽점프 상태인지 반환
-    public bool HasWallJumped
+    public bool IsWallJumping
     {
-        get { return hasWallJumped; }
+        get { return isWallJumping; }
         set
         {
-            if (value != hasWallJumped)
+            if (value != isWallJumping)
             {
-                hasWallJumped = value;
+                isWallJumping = value;
             }
         }
     }
@@ -186,7 +186,7 @@ public class PlayerBase : MonoBehaviour
         else
         {
             // 벽점프 시 벽점프 벡터 적용
-            if (hasWallJumped)
+            if (isWallJumping)
             {
                 FinalVector += playerJump.LerpWallJumpVector(horizontalMove.GetMoveVector());
             }
@@ -195,6 +195,9 @@ public class PlayerBase : MonoBehaviour
             {
                 FinalVector += horizontalMove.GetMoveVector();
             }
+
+            if (playerJump.GetJumpVector().y > 0.01f)
+                Debug.Log($"{playerJump.GetJumpVector()}");
 
             FinalVector += playerJump.GetJumpVector();
             FinalVector += playerJump.GetGravityVector();
