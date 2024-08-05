@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -8,13 +12,14 @@ public class GameManager : MonoBehaviour
     public static bool isPlaying = true;
     private float startTime;
 
-    public GameObject player, floor, spikeFloor;
+    public GameObject player, floor, spikeFloor, gameOverPanel, _gameOverFirst;
+    public InputActionMap uiActionMap;
     public float changeSpeed = 0.1f;
     public GameObject[] DashGauge, DashSlots;
     public int[] EXPNeeded;
     public int CurrentExp = 0;
 
-    public TMPro.TextMeshProUGUI timerText, expText;
+    public TMPro.TextMeshProUGUI timerText, expText, recordText;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +28,7 @@ public class GameManager : MonoBehaviour
         CurrentExp = 0;
         startTime = Time.time;
         StartCoroutine("RiseSpike");
+        EventSystem.current.SetSelectedGameObject(_gameOverFirst);
     }
 
     // Update is called once per frame
@@ -57,6 +63,11 @@ public class GameManager : MonoBehaviour
             if (player.GetComponent<PlayerDash>().MaxDashes < 5) expText.text = "EXP: " + CurrentExp + " / " + EXPNeeded[player.GetComponent<PlayerDash>().MaxDashes - 1];
             else expText.text = "Max Level";
         }
+        else
+        {
+            gameOverPanel.SetActive(true);
+            recordText.text = timerText.text;
+        }
     }
 
     IEnumerator RiseSpike()
@@ -68,5 +79,15 @@ public class GameManager : MonoBehaviour
             floor.transform.position = new Vector3(floor.transform.position.x, floor.transform.position.y - changeSpeed, 0f);
         }
         Destroy(floor);
+    }
+
+    public void RestartPressed()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void MainMenuPressed()
+    {
+        SceneManager.LoadScene(0);
     }
 }

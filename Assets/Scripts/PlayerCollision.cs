@@ -90,7 +90,7 @@ public class PlayerCollision : MonoBehaviour
                 .gameObject.GetComponent<Rigidbody2D>().velocity;
         }
 
-        Debug.Log($"{_centerCollisionCount}");
+        //Debug.Log($"{_centerCollisionCount}");
 
         //Debug.Log($"Ground: {onGround}, RightWall: {onRightWall}, LeftWall: {onLeftWall}");
     }
