@@ -437,8 +437,8 @@ MonoBehaviour:
   - {fileID: 5344433257289090904}
   Item: 0
   Exp: 10
-  x: 6
-  y: 2
+  x: 3
+  y: 1
   start: 0
   HP: 0
   isTouched: 0

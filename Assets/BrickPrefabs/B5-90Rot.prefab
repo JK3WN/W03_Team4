@@ -55,8 +55,8 @@ MonoBehaviour:
   - {fileID: 8043596842998453234}
   Item: 0
   Exp: 1
-  x: 6
-  y: 4
+  x: 3
+  y: 2
   start: 0
   HP: 0
   isTouched: 0
@@ -123,9 +123,37 @@ CompositeCollider2D:
   m_GeometryType: 1
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 7781445643356507123}
+    m_ColliderPaths:
+    - - X: 10000000
+        Y: 2
+      - X: 9999995
+        Y: 20000002
+      - X: -30000004
+        Y: 19999996
+      - X: -30000000
+        Y: -4
+  - m_Collider: {fileID: 4499593895411675098}
+    m_ColliderPaths:
+    - - X: 30000004
+        Y: -19999996
+      - X: 30000000
+        Y: 4
+      - X: -10000000
+        Y: -2
+      - X: -9999995
+        Y: -20000002
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: -0.9999995, y: -1.9999708}
+      - {x: 3.0000005, y: -1.9999704}
+      - {x: 2.999971, y: 0.0000004}
+      - {x: 1, y: 0.0000295}
+      - {x: 0.9999702, y: 2.0000002}
+      - {x: -3.0000005, y: 1.9999704}
+      - {x: -2.999971, y: -0.0000004}
+      - {x: -1, y: -0.0000295}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -138,6 +166,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5499653249221046066}
     m_Modifications:
+    - target: {fileID: 4525463949369214647, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+      propertyPath: m_UsedByComposite
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5954158788972174362, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
       propertyPath: m_Name
       value: B4-90Rota
@@ -190,6 +222,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+--- !u!61 &4499593895411675098 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4525463949369214647, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+  m_PrefabInstance: {fileID: 53033512881252717}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9168766671400548964 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9188021670407787273, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
@@ -210,6 +247,10 @@ PrefabInstance:
     - target: {fileID: 1165070128051251132, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.477
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525463949369214647, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+      propertyPath: m_UsedByComposite
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5954158788972174362, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
       propertyPath: m_Name
@@ -265,6 +306,11 @@ PrefabInstance:
 --- !u!4 &3076798499220938317 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9188021670407787273, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
+  m_PrefabInstance: {fileID: 6138567824127003972}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &7781445643356507123 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4525463949369214647, guid: be44e4fd5dbbf2841902561f2f771fae, type: 3}
   m_PrefabInstance: {fileID: 6138567824127003972}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &8043596842998453234 stripped
