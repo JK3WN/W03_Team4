@@ -149,8 +149,9 @@ public class SpawnManager : MonoBehaviour
     }
 
     // YJK, 원하는 블록을 스폰시키는 명령
-    public void SpawnBrick(int direction, int startPos, float speed, GameObject blockType)
+    public GameObject SpawnBrick(int direction, int startPos, float speed, GameObject blockType)
     {
+        GameObject tempBrick = null;
         /*
         // 블럭의 X너비, Y너비
         float block_X = blockType.GetComponent<PlatformMove>().x;
@@ -194,22 +195,26 @@ public class SpawnManager : MonoBehaviour
             case 0:
                 GameObject brick0 = GameObject.Instantiate(blockType, new Vector3(MirrorList[0].transform.position.x - (float)blockType.GetComponent<PlatformMove>().x / 2, MirrorList[0].transform.position.y + MirrorList[0].transform.lossyScale.y / 2 - (float)blockType.GetComponent<PlatformMove>().y / 2 - startPos * SpaceInterval, 0), Quaternion.identity);
                 brick0.GetComponent<PlatformMove>().MoveSpeed = new Vector2(speed, 0);
+                tempBrick = brick0;
                 break;
             case 1:
                 GameObject brick1 = GameObject.Instantiate(blockType, new Vector3(MirrorList[1].transform.position.x + (float)blockType.GetComponent<PlatformMove>().x / 2, MirrorList[1].transform.position.y + MirrorList[1].transform.lossyScale.y / 2 - (float)blockType.GetComponent<PlatformMove>().y / 2 - startPos * SpaceInterval, 0), Quaternion.identity);
                 brick1.GetComponent<PlatformMove>().MoveSpeed = new Vector2(-speed, 0);
+                tempBrick = brick1;
                 break;
             case 2:
                 GameObject brick2 = GameObject.Instantiate(blockType, new Vector3(MirrorList[2].transform.position.x - MirrorList[2].transform.lossyScale.x / 2 + (float)blockType.GetComponent<PlatformMove>().x / 2 + startPos * SpaceInterval, MirrorList[2].transform.position.y - (float)blockType.GetComponent<PlatformMove>().y / 2, 0), Quaternion.identity);
                 brick2.GetComponent<PlatformMove>().MoveSpeed = new Vector2(0, speed);
+                tempBrick = brick2;
                 break;
             case 3:
                 GameObject brick3 = GameObject.Instantiate(blockType, new Vector3(MirrorList[3].transform.position.x - MirrorList[3].transform.lossyScale.x / 2 + (float)blockType.GetComponent<PlatformMove>().x / 2 + startPos * SpaceInterval, MirrorList[3].transform.position.y + (float)blockType.GetComponent<PlatformMove>().y / 2, 0), Quaternion.identity);
                 brick3.GetComponent<PlatformMove>().MoveSpeed = new Vector2(0, -speed);
-                break;
-            default:
+                tempBrick = brick3;
                 break;
         }
+
+        return tempBrick;
     }
 
     public void spawnBrick()
