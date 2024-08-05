@@ -46,9 +46,9 @@ public class PlayerDash : MonoBehaviour
     {
         isDashing = true;
         canDash = false;
-        dashVector = Direction * 25f;
+        dashVector = Direction * 32f;
 
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.17f);
 
         isDashing = false;
         if (dashVector.y > 0) isUpDash = true;
