@@ -436,7 +436,7 @@ MonoBehaviour:
   - {fileID: 6084226919867252217}
   - {fileID: 5344433257289090904}
   Item: 0
-  Exp: 1
+  Exp: 10
   x: 6
   y: 2
   start: 0
