@@ -29,6 +29,7 @@ public class Death : MonoBehaviour
         if (GetComponent<PlayerCollision>().IsDead)
         {
             Debug.Log("Dead!");
+            GameManager.isPlaying = false;
         }
     }
 }

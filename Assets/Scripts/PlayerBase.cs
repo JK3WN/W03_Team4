@@ -4,44 +4,44 @@ using UnityEngine;
 
 /// <summary>
 /// <para>
-/// ÀÛ¼ºÀÚ : 1.ÀÓÀç±Õ, 2.Á¶¿ì¼®
+/// ìž‘ì„±ìž : 1.ìž„ìž¬ê· , 2.ì¡°ìš°ì„
 /// </para>
 /// <para>
 /// ===========================================
 /// </para>
-/// ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ® °ü¸®¿ë Å¬·¡½º
-/// ÇÃ·¹ÀÌ¾î¿¡ Àû¿ëµÉ °¢Á¾ ÄÄÆ÷³ÍÆ®¸¦ ÂüÁ¶¹Þ¾Æ PlayerBase¿¡¼­ ÇÃ·¹ÀÌ¾îÀÇ ¸ðµç ¹°¸® º¤ÅÍ Àû¿ë
+/// í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ ê´€ë¦¬ìš© í´ëž˜ìŠ¤
+/// í”Œë ˆì´ì–´ì— ì ìš©ë  ê°ì¢… ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¸ì¡°ë°›ì•„ PlayerBaseì—ì„œ í”Œë ˆì´ì–´ì˜ ëª¨ë“  ë¬¼ë¦¬ ë²¡í„° ì ìš©
 /// <para>
-/// FinalVector : ÇÃ·¹ÀÌ¾î¿¡ Àû¿ëÇÒ ¸ðµç ¹°¸® º¤ÅÍ¸¦ ÇÕÄ£ ÃÖÁ¾ º¤ÅÍ
+/// FinalVector : í”Œë ˆì´ì–´ì— ì ìš©í•  ëª¨ë“  ë¬¼ë¦¬ ë²¡í„°ë¥¼ í•©ì¹œ ìµœì¢… ë²¡í„°
 /// </para>
 /// <para>
-/// CanWallJump : º® Á¡ÇÁ°¡ °¡´ÉÇÑÁö¿¡ ´ëÇÑ ÆÇÁ¤ True/False ¹ÝÈ¯
+/// CanWallJump : ë²½ ì í”„ê°€ ê°€ëŠ¥í•œì§€ì— ëŒ€í•œ íŒì • True/False ë°˜í™˜
 /// </para>
 /// <para>
-/// IsJumping : ÇÃ·¹ÀÌ¾î°¡ Á¡ÇÁ »óÅÂÀÎÁö True/False ¹ÝÈ¯
+/// IsJumping : í”Œë ˆì´ì–´ê°€ ì í”„ ìƒíƒœì¸ì§€ True/False ë°˜í™˜
 /// </para>
 /// <para>
-/// IsWallJumping : ÇÃ·¹ÀÌ¾î°¡ º®Á¡ÇÁ »óÅÂÀÎÁö True/False ¹ÝÈ¯
+/// IsWallJumping : í”Œë ˆì´ì–´ê°€ ë²½ì í”„ ìƒíƒœì¸ì§€ True/False ë°˜í™˜
 /// </para>
 /// <para>
-/// IsWallClimbing : º®¿¡ ¸Å´Þ·È´ÂÁö¿¡ ´ëÇÑ ÆÇÀü True/False ¹ÝÈ¯
+/// IsWallClimbing : ë²½ì— ë§¤ë‹¬ë ¸ëŠ”ì§€ì— ëŒ€í•œ íŒì „ True/False ë°˜í™˜
 /// </para>
 /// <para>
-/// OnGround : ÇÃ·¹ÀÌ¾î°¡ ¶¥¿¡ ÀÖ´ÂÁö True/False ¹ÝÈ¯
+/// OnGround : í”Œë ˆì´ì–´ê°€ ë•…ì— ìžˆëŠ”ì§€ True/False ë°˜í™˜
 /// </para>
 /// <para>
-/// OnWall : ÇÃ·¹ÀÌ¾î°¡ º®¿¡ ºÙ¾ú´ÂÁö True/False ¹ÝÈ¯
+/// OnWall : í”Œë ˆì´ì–´ê°€ ë²½ì— ë¶™ì—ˆëŠ”ì§€ True/False ë°˜í™˜
 /// </para>
 /// <para>
-/// WallSide : ¾î´À ¹æÇâ º®¿¡ ºÙ¾ú´ÂÁö int ¹ÝÈ¯
+/// WallSide : ì–´ëŠ ë°©í–¥ ë²½ì— ë¶™ì—ˆëŠ”ì§€ int ë°˜í™˜
 /// </para>
 /// <para>
-/// 0 : º®X | 1 : ¿À¸¥ÂÊ | 2 : ¿ÞÂÊ
+/// 0 : ë²½X | 1 : ì˜¤ë¥¸ìª½ | 2 : ì™¼ìª½
 /// </para>
 /// </summary>
 public class PlayerBase : MonoBehaviour
 {
-    #region ÀÎ½ºÆåÅÍ º¯¼ö ¼±¾ð
+    #region ì¸ìŠ¤íŽ™í„° ë³€ìˆ˜ ì„ ì–¸
     [Header("Player Base Components")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private HorizontalMove horizontalMove;
@@ -61,8 +61,8 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private bool isJumping = false;
     [SerializeField] private bool isWallJumping = false;
 
-    // ÇÃ·¹ÀÌ¾î°¡ º®¿¡ ºÙÀ½ && ÇÃ·¹ÀÌ¾î°¡ º® ¹æÇâÀ¸·Î Å°º¸µå ´©¸§
-    // && ÇÃ·¹ÀÌ¾î°¡ ¶¥¿¡ ºÙ¾îÀÖÁö ¾ÊÀ½ && ÇÃ·¹ÀÌ¾î°¡ »ó½ÂÁßÀÌ ¾Æ´Ò ¶§
+    // í”Œë ˆì´ì–´ê°€ ë²½ì— ë¶™ìŒ && í”Œë ˆì´ì–´ê°€ ë²½ ë°©í–¥ìœ¼ë¡œ í‚¤ë³´ë“œ ëˆ„ë¦„
+    // && í”Œë ˆì´ì–´ê°€ ë•…ì— ë¶™ì–´ìžˆì§€ ì•ŠìŒ && í”Œë ˆì´ì–´ê°€ ìƒìŠ¹ì¤‘ì´ ì•„ë‹ ë•Œ
     private bool isWallClimbing => playerCollision.OnWall 
                                    && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0) 
                                    && !playerCollision.OnGround 
@@ -72,9 +72,9 @@ public class PlayerBase : MonoBehaviour
     
     #endregion
 
-    #region ¿ÜºÎ ÂüÁ¶
+    #region ì™¸ë¶€ ì°¸ì¡°
 
-    // ÇöÀç º® Á¡ÇÁ°¡ °¡´ÉÇÑÁö ¹ÝÈ¯
+    // í˜„ìž¬ ë²½ ì í”„ê°€ ê°€ëŠ¥í•œì§€ ë°˜í™˜
     public bool CanWallJump 
     {
         get { return canWallJump; }
@@ -99,7 +99,7 @@ public class PlayerBase : MonoBehaviour
         }
     }
 
-    // ÇöÀç Á¡ÇÁ »óÅÂÀÎÁö ¹ÝÈ¯
+    // í˜„ìž¬ ì í”„ ìƒíƒœì¸ì§€ ë°˜í™˜
     public bool IsJumping
     {
         get { return isJumping; }
@@ -112,7 +112,7 @@ public class PlayerBase : MonoBehaviour
         }
     }
 
-    // ÇöÀç º®Á¡ÇÁ »óÅÂÀÎÁö ¹ÝÈ¯
+    // í˜„ìž¬ ë²½ì í”„ ìƒíƒœì¸ì§€ ë°˜í™˜
     public bool IsWallJumping
     {
         get { return isWallJumping; }
@@ -125,7 +125,7 @@ public class PlayerBase : MonoBehaviour
         }
     }
 
-    // ÇöÀç º® Å¸±â »óÅÂÀÎÁö ¹ÝÈ¯
+    // í˜„ìž¬ ë²½ íƒ€ê¸° ìƒíƒœì¸ì§€ ë°˜í™˜
     public bool IsWallClimbing
     {
         get { return isWallClimbing; }
@@ -162,7 +162,7 @@ public class PlayerBase : MonoBehaviour
     {
         FinalVector = Vector2.zero;
 
-        // ´ë½¬ ½Ã velocity¸¦ °íÁ¤ÇÏ¿© Àû¿ë, ´ë½¬ ³¡³ª±â Àü±îÁö ´Ù¸¥ ¿òÁ÷ÀÓ Â÷´Ü
+        // ëŒ€ì‰¬ ì‹œ velocityë¥¼ ê³ ì •í•˜ì—¬ ì ìš©, ëŒ€ì‰¬ ëë‚˜ê¸° ì „ê¹Œì§€ ë‹¤ë¥¸ ì›€ì§ìž„ ì°¨ë‹¨
         if (playerDash.IsDashing)
         {
             endDash = true;
@@ -176,7 +176,7 @@ public class PlayerBase : MonoBehaviour
             return;
         }
 
-        // ÇÃ·¹ÀÌ¾î°¡ º®À» Àâ°í ÀÖÀ¸¸é ¸Å´Þ¸®±â¿Í º®Á¡ÇÁ¿¡ ´ëÇÑ º¤ÅÍ¸¸ Àû¿ë
+        // í”Œë ˆì´ì–´ê°€ ë²½ì„ ìž¡ê³  ìžˆìœ¼ë©´ ë§¤ë‹¬ë¦¬ê¸°ì™€ ë²½ì í”„ì— ëŒ€í•œ ë²¡í„°ë§Œ ì ìš©
         if (isWallClimbing)
         {
             FinalVector += playerWallClimb.GetWallVector();
@@ -184,12 +184,12 @@ public class PlayerBase : MonoBehaviour
         }
         else
         {
-            // º®Á¡ÇÁ ½Ã º®Á¡ÇÁ º¤ÅÍ Àû¿ë
+            // ë²½ì í”„ ì‹œ ë²½ì í”„ ë²¡í„° ì ìš©
             if (isWallJumping)
             {
                 FinalVector += playerJump.LerpWallJumpVector(horizontalMove.GetMoveVector());
             }
-            // ¿Ü¿¡´Â ÀÌµ¿ º¤ÅÍ Àû¿ë
+            // ì™¸ì—ëŠ” ì´ë™ ë²¡í„° ì ìš©
             else
             {
                 FinalVector += horizontalMove.GetMoveVector();
@@ -200,7 +200,7 @@ public class PlayerBase : MonoBehaviour
             FinalVector += playerJump.GetGravityVector();
         }
 
-        // ÃÖÁ¾ º¤ÅÍ Àû¿ë
+        // ìµœì¢… ë²¡í„° ì ìš©
         rb.velocity = FinalVector;
     }
 }

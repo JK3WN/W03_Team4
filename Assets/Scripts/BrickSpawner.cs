@@ -26,7 +26,7 @@ public class BrickSpawner : MonoBehaviour
     public int[] additionalBrickX = new int[columnSize];
     public int[] additionalBrickY = new int[rowSize];
 
-    public float[] percents;
+    public float[] percents = new float[columnSize+1];
 
     public void Awake()
     {
@@ -125,6 +125,7 @@ public class BrickSpawner : MonoBehaviour
         {
             sumX += brickX[i];
         }
+
         float randomXY = Random.Range(0, 1 / sumX + 1 / sumY);
         float randomLR = Random.Range(0.0f, 1.0f);
         // Y���̶��
@@ -165,7 +166,7 @@ public class BrickSpawner : MonoBehaviour
             {
                 // 이전에 값이 남아 있을 수 있으므로 초기값 1로 설정
                 additionalBrickY[i] = 1;
-                for (int j = i; j < i + brickCount - 1; j++)
+                for (int j = i; j < i + brickCount; j++)
                 {
                     // 블록 크기 만큼 합치기
                     additionalBrickY[i] += brickY[j];
@@ -195,7 +196,7 @@ public class BrickSpawner : MonoBehaviour
             for (int i = 0; i < columnSize - brickCount + 1; i++)
             {
                 additionalBrickX[i] = 1;
-                for (int j  = i; j < i + brickCount - 1; j++)
+                for (int j  = i; j < i + brickCount; j++)
                 {
                     additionalBrickX[i] += brickX[j];
                 }
