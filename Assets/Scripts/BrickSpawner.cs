@@ -54,6 +54,7 @@ public class BrickSpawner : MonoBehaviour
     public void AddBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();
+        Debug.Log($"startPos: {startPos} / BlockSizeY: {platformMove.y} / Position: {startPos}");
         if (direction == 0 || direction == 1)
         {
             for (int i = startPos; i < startPos + platformMove.y; i++)
