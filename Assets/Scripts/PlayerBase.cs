@@ -197,7 +197,7 @@ public class PlayerBase : MonoBehaviour
             }
 
             if (playerJump.GetJumpVector().y > 0.01f)
-                Debug.Log($"{playerJump.GetJumpVector()}");
+                //Debug.Log($"{playerJump.GetJumpVector()}");
 
             FinalVector += playerJump.GetJumpVector();
             FinalVector += playerJump.GetGravityVector();
