@@ -61,6 +61,10 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private bool isJumping = false;
     [SerializeField] private bool isWallJumping = false;
 
+    [Space] 
+    [Header("Player Max Velocity")] 
+    [SerializeField] private float playerMaxSpeed = 0;
+
     // 플레이어가 벽에 붙음 && 플레이어가 벽 방향으로 키보드 누름
     // && 플레이어가 땅에 붙어있지 않음 && 플레이어가 상승중이 아닐 때
     private bool isWallClimbing => playerCollision.OnWall
@@ -200,6 +204,9 @@ public class PlayerBase : MonoBehaviour
             FinalVector += playerJump.GetJumpVector();
             FinalVector += playerJump.GetGravityVector();
         }
+
+        if (FinalVector.magnitude > playerMaxSpeed)
+            FinalVector = FinalVector.normalized * playerMaxSpeed;
 
         // 최종 벡터 적용
         rb.velocity = FinalVector;
