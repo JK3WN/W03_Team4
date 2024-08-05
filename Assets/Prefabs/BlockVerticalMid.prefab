@@ -520,7 +520,7 @@ MonoBehaviour:
   - {fileID: 2138146916140463498}
   - {fileID: 8434906389249658964}
   Item: 0
-  Exp: 1
+  Exp: 10
   x: 2
   y: 6
   start: 0
