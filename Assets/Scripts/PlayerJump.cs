@@ -61,14 +61,15 @@ public class PlayerJump : MonoBehaviour
 
     #region 로컬 변수 선언
 
-    private bool isJumping = false;     // 점프 벡터 확정 적용 제어 bool
-    private bool isHoldJump = false;    // 점프키 입력 체크 변수(누르고 있으면 true)
-    private float jumpCheckTime;        // 최소 점프 높이 설정 타이머용 변수
-    private float wallJumpCheckTime;    // 벽점프 코요테 타임 타이머용 변수
-    private bool isBufferFull;          // 선입력 버퍼 적용 bool
-    private float bufferCheckTime;      // 버퍼 초기화 타이머용 변수
-    private int recentWallDir;          // 최근에 닿은 벽 방향 저장 변수
-    private float coyoteCheckTime;      // 코요테 타임 타이머용 변수
+    private bool mustApplyJumpVector = false;   // 점프 벡터 확정 적용 제어 bool
+    private bool isHoldJump = false;            // 점프키 입력 체크 변수(누르고 있으면 true)
+    private float jumpCheckTime;                // 최소 점프 높이 설정 타이머용 변수
+    private float wallJumpCheckTime;            // 벽점프 코요테 타임 타이머용 변수
+    private bool isBufferFull;                  // 선입력 버퍼 적용 bool
+    private float bufferCheckTime;              // 버퍼 초기화 타이머용 변수
+    private int recentWallDir;                  // 최근에 닿은 벽 방향 저장 변수
+    [SerializeField]private float coyoteCheckTime;              // 코요테 타임 타이머용 변수
+    private bool hasJumped;                     // 점프를 했었는지 판단용 bool / 점프 시 True, 땅이나 벽에 닿으면 False
 
     #endregion
 
@@ -85,17 +86,40 @@ public class PlayerJump : MonoBehaviour
     // 점프에 대한 각종 타이머 계산
     void Update()
     {
-        if (playerBase.HasWallJumped)
+        if (playerBase.IsWallJumping)
             CheckWallJumpTime();
 
-        if (playerBase.HasJumped)
+        if (playerBase.IsJumping)
             CheckJumpTime();
 
         if (isBufferFull)
             CheckBufferTime();
 
-        /*if (!playerBase.HasJumped)
-            CheckCoyoteTime();*/
+        if (!hasJumped 
+            && !playerBase.OnGround 
+            && !playerBase.IsWallClimbing
+            && coyoteCheckTime <= coyoteTime)
+        {
+            if (!playerBase.CanCoyoteJump)
+            {
+                playerBase.CanCoyoteJump = true;
+                coyoteCheckTime = 0;
+            }
+            CheckCoyoteTime();
+        }
+        else
+        {
+            playerBase.CanCoyoteJump = false;
+        }
+            
+
+        if (hasJumped && 
+            ((playerBase.OnGround && !playerBase.IsJumping) 
+             || (playerBase.IsWallClimbing && !playerBase.IsWallJumping)))
+        {
+            hasJumped = false;
+            coyoteCheckTime = 0;
+        }
 
         CheckCanWallJump();
         CheckRecentWall();
@@ -103,21 +127,22 @@ public class PlayerJump : MonoBehaviour
 
     void FixedUpdate()
     {
-        // input buffer에 선입력된 점프가 있는 상태에서 땅에 닿으면 점프
-        if (isBufferFull && playerBase.OnGround)
-        {
-            SetJumpVector();
-            // 다음 구문에서 벡터 확정 후 초기화를 막기 위해서 return
-            return;
-        }
+        
 
         // 점프 시 벡터 확정 적용 후 초기화를 위한 구문
-        if (isJumping)
+        if (mustApplyJumpVector)
         {
-            isJumping = false;
+            mustApplyJumpVector = false;
             return;
         }
         jumpVector = Vector2.zero;
+
+        // input buffer에 선입력된 점프가 있는 상태에서 땅에 닿으면 점프
+        if (isBufferFull && playerBase.OnGround && !hasJumped)
+        {
+            SetJumpVector();
+            // 다음 구문에서 벡터 확정 후 초기화를 막기 위해서 return
+        }
 
         MultiplyOnPlayerFall();
     }
@@ -194,10 +219,11 @@ public class PlayerJump : MonoBehaviour
     private void SetJumpVector()
     {
         jumpVector = new Vector2(0, jumpPower);
-        isJumping = true;
-        playerBase.HasJumped = true;
+        mustApplyJumpVector = true;
+        playerBase.IsJumping = true;
         isBufferFull = false;
         playerBase.CanCoyoteJump = false;
+        hasJumped = true;
     }
 
     /// <summary>
@@ -217,12 +243,12 @@ public class PlayerJump : MonoBehaviour
         {
             if (!isHoldJump)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
-            playerBase.HasJumped = false;
+            playerBase.IsJumping = false;
             jumpCheckTime = 0f;
         }
     }
 
-    /*/// <summary>
+    /// <summary>
     /// <para>
     /// 작성자 : 조우석
     /// </para>
@@ -233,27 +259,13 @@ public class PlayerJump : MonoBehaviour
     /// </summary>
     private void CheckCoyoteTime()
     {
-        if (playerBase.OnGround)
+        coyoteCheckTime += Time.deltaTime;
+
+        if (coyoteCheckTime > coyoteTime)
         {
             playerBase.CanCoyoteJump = false;
-            coyoteCheckTime = 0;
-        }
-        else 
-        {
-            playerBase.CanCoyoteJump = true;
-            coyoteCheckTime += Time.deltaTime;
-            if (coyoteCheckTime > coyoteTime)
-            {
-                playerBase.CanCoyoteJump = false;
-                coyoteCheckTime = 0;
-            }
         }
     }
-
-    private void CheckCanCoyote()
-    {
-
-    }*/
 
     #endregion
 
@@ -362,7 +374,7 @@ public class PlayerJump : MonoBehaviour
         {
             if (!isHoldJump)
                 rb.velocity = new Vector2(rb.velocity.x, 0);
-            playerBase.HasWallJumped = false;
+            playerBase.IsWallJumping = false;
             jumpCheckTime = 0f;
         }
     }
@@ -395,7 +407,7 @@ public class PlayerJump : MonoBehaviour
         if (context.performed)
         {
             isHoldJump = true;
-            if (playerBase.OnGround/* || playerBase.CanCoyoteJump*/)
+            if (!hasJumped && (playerBase.OnGround || playerBase.CanCoyoteJump))
             {
                 SetJumpVector();
             }
@@ -404,14 +416,15 @@ public class PlayerJump : MonoBehaviour
                 AddInputBuffer();
             }
 
-            if (playerBase.CanWallJump)
+            if (playerBase.CanWallJump && !hasJumped)
             {
                 jumpVector = new Vector2(wallJumpPowerVector.x * (recentWallDir == 1 ? -1 : 1), wallJumpPowerVector.y);
                 wallJumpVector = jumpVector;
                 jumpCheckTime = 0;
-                isJumping = true;
-                playerBase.HasWallJumped = true;
+                mustApplyJumpVector = true;
+                playerBase.IsWallJumping = true;
                 isHoldJump = true;
+                hasJumped = true;
             }
         }
 
@@ -422,7 +435,7 @@ public class PlayerJump : MonoBehaviour
             if (rb.velocity.y > 0f)
             {
                 jumpVector = new Vector2(0, 0);
-                if (!playerBase.HasJumped && !playerBase.HasWallJumped)
+                if (!playerBase.IsJumping && !playerBase.IsWallJumping)
                     rb.velocity = new Vector2(rb.velocity.x, 0);
             }
         }

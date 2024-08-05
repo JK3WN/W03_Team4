@@ -11,7 +11,8 @@ public class Attack : MonoBehaviour
     [Header("공격 반경")]
     [Header("공격 X축")][Range(0.5f, 3.0f)] public float x;
     [Header("공격 y축")][Range(0.5f, 3.0f)] public float y;
-    [Header("공격 쿨타임")][Range(0.5f, 3.0f)] public float attackCoolDown = 0.15f;
+    [Header("공격 지속시간")][Range(0.0f, 2.0f)] public float attackTime = 0.03f;
+    [Header("공격 쿨타임")][Range(0.0f, 3.0f)] public float attackCoolDown = 0.15f;
     private bool isAttacking = false;
     public float sideAngle = 45f;
     #endregion
@@ -60,8 +61,11 @@ public class Attack : MonoBehaviour
         {
             MovePickAxe(-x, 0, 90.0f);
         }
-        yield return new WaitForSeconds(attackCoolDown);
+
+        yield return new WaitForSeconds(attackTime);
         pickaxe.SetActive(false);
+
+        yield return new WaitForSeconds(attackCoolDown);
         isAttacking = false;
     }
     void MovePickAxe(float x, float y, float degree)
