@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
         {
             gameOverPanel.SetActive(true);
             recordText.text = timerText.text;
+            Destroy(player);
         }
     }
 
