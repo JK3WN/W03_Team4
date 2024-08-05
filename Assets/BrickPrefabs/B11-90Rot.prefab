@@ -152,7 +152,7 @@ MonoBehaviour:
   HPList:
   - {fileID: 8122487791188520776}
   Item: 0
-  Exp: 1
+  Exp: 10
   x: 4
   y: 6
   start: 0

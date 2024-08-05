@@ -770,7 +770,7 @@ MonoBehaviour:
   - {fileID: 9216636267029934035}
   - {fileID: 5048500508793118606}
   Item: 0
-  Exp: 1
+  Exp: 10
   x: 2
   y: 5
   start: 0
