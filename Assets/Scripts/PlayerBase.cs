@@ -54,8 +54,8 @@ public class PlayerBase : MonoBehaviour
     [Header("Player Physics")]
     [SerializeField] private Vector2 FinalVector;
 
-    [Space] 
-    [Header("Booleans")] 
+    [Space]
+    [Header("Booleans")]
     [SerializeField] private bool canWallJump = false;
     [SerializeField] private bool canCoyoteJump = false;
     [SerializeField] private bool isJumping = false;
@@ -63,19 +63,19 @@ public class PlayerBase : MonoBehaviour
 
     // 플레이어가 벽에 붙음 && 플레이어가 벽 방향으로 키보드 누름
     // && 플레이어가 땅에 붙어있지 않음 && 플레이어가 상승중이 아닐 때
-    private bool isWallClimbing => playerCollision.OnWall 
-                                   && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0) 
-                                   && !playerCollision.OnGround 
+    private bool isWallClimbing => playerCollision.OnWall
+                                   && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0)
+                                   && !playerCollision.OnGround
                                    && rb.velocity.y <= 0;
 
     private bool endDash = false;
-    
+
     #endregion
 
     #region 외부 참조
 
     // 현재 벽 점프가 가능한지 반환
-    public bool CanWallJump 
+    public bool CanWallJump
     {
         get { return canWallJump; }
         set
@@ -181,6 +181,7 @@ public class PlayerBase : MonoBehaviour
         {
             FinalVector += playerWallClimb.GetWallVector();
             FinalVector += playerJump.GetJumpVector();
+            FinalVector += playerCollision.GetWallVector();
         }
         else
         {
@@ -201,6 +202,6 @@ public class PlayerBase : MonoBehaviour
         }
 
         // 최종 벡터 적용
-        if(GameManager.isPlaying) rb.velocity = FinalVector;
+        rb.velocity = FinalVector;
     }
 }
