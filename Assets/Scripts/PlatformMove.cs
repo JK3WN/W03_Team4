@@ -73,6 +73,21 @@ public class PlatformMove : MonoBehaviour
         // YJK, HP가 0 이하가 되면 이 플랫폼 삭제
         if (HP <= 0)
         {
+            switch (Direction)
+            {
+                case EnterDirection.East:
+                    GameObject.Find("SpawnManager").GetComponent<BrickSpawner>().DeleteBrick(this.gameObject, start, 0);
+                    break;
+                case EnterDirection.West:
+                    GameObject.Find("SpawnManager").GetComponent<BrickSpawner>().DeleteBrick(this.gameObject, start, 1);
+                    break;
+                case EnterDirection.North:
+                    GameObject.Find("SpawnManager").GetComponent<BrickSpawner>().DeleteBrick(this.gameObject, start, 2);
+                    break;
+                default:
+                    GameObject.Find("SpawnManager").GetComponent<BrickSpawner>().DeleteBrick(this.gameObject, start, 3);
+                    break;
+            }
             Destroy(this.gameObject);
         }
     }

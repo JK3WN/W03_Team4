@@ -28,16 +28,19 @@ public class BrickSpawner : MonoBehaviour
 
     public float[] percents;
 
-    /// <summary>
-    /// <para>
-    /// 작성자 : 이승철
-    /// </para>
-    /// <para>
-    /// ===========================================
-    /// </para>
-    /// 블록 추가시 메소드, 블록 추가를 하고 추가된 상태를 현재 블록 배열에다가 갱신함
-    /// 시작지점(startPos) 배열부터 해서 블록크기만큼 번째 배열까지 크기를 1 더함
-    /// </summary>
+    public void Awake()
+    {
+        for (int i = 0; i < brickX.Length; i++)
+        {
+            brickX[i] = 1;
+        }
+
+        for (int i = 0; i < brickY.Length; i++)
+        {
+            brickY[i] = 1;
+        }
+    }
+
     public void AddBrick(GameObject brick, int startPos, int direction)
     {
         PlatformMove platformMove = brick.GetComponent<PlatformMove>();

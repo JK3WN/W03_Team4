@@ -29,7 +29,6 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private Vector2 wallJumpPowerVector;
     [Range(0.01f, 50.0f)]
     [SerializeField] private float wallJumpLerpFactor;
-    [SerializeField] private float inputBufferKeepingTime;
 
     [Space]
 
@@ -48,6 +47,8 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private float wallJumpAbleTime = 0f;
     [Range(0f, 1.0f)]
     [SerializeField] private float bufferResetTime = 0f;
+    [Range(0f, 1.0f)]
+    [SerializeField] private float coyoteTime = 0f;
 
     [Space]
 
@@ -66,6 +67,8 @@ public class PlayerJump : MonoBehaviour
     private float wallJumpCheckTime;    // 벽점프 코요테 타임 타이머용 변수
     private bool isBufferFull;          // 선입력 버퍼 적용 bool
     private float bufferCheckTime;      // 버퍼 초기화 타이머용 변수
+    private int recentWallDir;          // 최근에 닿은 벽 방향 저장 변수
+    private float coyoteCheckTime;      // 코요테 타임 타이머용 변수
 
     #endregion
 
@@ -91,7 +94,11 @@ public class PlayerJump : MonoBehaviour
         if (isBufferFull)
             CheckBufferTime();
 
+        /*if (!playerBase.HasJumped)
+            CheckCoyoteTime();*/
+
         CheckCanWallJump();
+        CheckRecentWall();
     }
 
     void FixedUpdate()
@@ -190,6 +197,7 @@ public class PlayerJump : MonoBehaviour
         isJumping = true;
         playerBase.HasJumped = true;
         isBufferFull = false;
+        playerBase.CanCoyoteJump = false;
     }
 
     /// <summary>
@@ -213,6 +221,39 @@ public class PlayerJump : MonoBehaviour
             jumpCheckTime = 0f;
         }
     }
+
+    /*/// <summary>
+    /// <para>
+    /// 작성자 : 조우석
+    /// </para>
+    /// <para>
+    /// ===========================================
+    /// </para>
+    /// 코요테 타임 타이머를 통해서 플레이어의 점프 가능 시간을 계산
+    /// </summary>
+    private void CheckCoyoteTime()
+    {
+        if (playerBase.OnGround)
+        {
+            playerBase.CanCoyoteJump = false;
+            coyoteCheckTime = 0;
+        }
+        else 
+        {
+            playerBase.CanCoyoteJump = true;
+            coyoteCheckTime += Time.deltaTime;
+            if (coyoteCheckTime > coyoteTime)
+            {
+                playerBase.CanCoyoteJump = false;
+                coyoteCheckTime = 0;
+            }
+        }
+    }
+
+    private void CheckCanCoyote()
+    {
+
+    }*/
 
     #endregion
 
@@ -282,7 +323,7 @@ public class PlayerJump : MonoBehaviour
     /// <para>
     /// ===========================================
     /// </para>
-    /// 널널한 벽점프 판정을 위해서 타이머를 통해서 플레이어의 벽점프 가능 시간을 계산
+    /// 널널한 벽점프 판정(코요테 타임)을 위해서 타이머를 통해서 플레이어의 벽점프 가능 시간을 계산
     /// </summary>
     private void CheckCanWallJump()
     {
@@ -326,6 +367,13 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
+    private void CheckRecentWall()
+    {
+        if (playerBase.WallSide == 0)
+            return;
+        recentWallDir = playerBase.WallSide;
+    }
+
     #endregion
 
     #region Input System 이벤트 함수
@@ -347,7 +395,7 @@ public class PlayerJump : MonoBehaviour
         if (context.performed)
         {
             isHoldJump = true;
-            if (playerBase.OnGround)
+            if (playerBase.OnGround/* || playerBase.CanCoyoteJump*/)
             {
                 SetJumpVector();
             }
@@ -358,10 +406,9 @@ public class PlayerJump : MonoBehaviour
 
             if (playerBase.CanWallJump)
             {
-                jumpVector = new Vector2(wallJumpPowerVector.x * (playerBase.WallSide == 1 ? -1 : 1), wallJumpPowerVector.y);
+                jumpVector = new Vector2(wallJumpPowerVector.x * (recentWallDir == 1 ? -1 : 1), wallJumpPowerVector.y);
                 wallJumpVector = jumpVector;
                 jumpCheckTime = 0;
-                Debug.Log($"{wallJumpVector}");
                 isJumping = true;
                 playerBase.HasWallJumped = true;
                 isHoldJump = true;

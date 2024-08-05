@@ -57,6 +57,7 @@ public class PlayerBase : MonoBehaviour
     [Space] 
     [Header("Booleans")] 
     [SerializeField] private bool canWallJump = false;
+    [SerializeField] private bool canCoyoteJump = false;
     [SerializeField] private bool hasJumped = false;
     [SerializeField] private bool hasWallJumped = false;
 
@@ -66,6 +67,8 @@ public class PlayerBase : MonoBehaviour
                                    && ((playerCollision.WallSide - 1.5f) * horizontalMove.inputVec.x < 0) 
                                    && !playerCollision.OnGround 
                                    && rb.velocity.y <= 0;
+
+    private bool endDash = false;
     
     #endregion
 
@@ -80,6 +83,18 @@ public class PlayerBase : MonoBehaviour
             if (value != canWallJump)
             {
                 canWallJump = value;
+            }
+        }
+    }
+
+    public bool CanCoyoteJump
+    {
+        get { return canCoyoteJump; }
+        set
+        {
+            if (value != canCoyoteJump)
+            {
+                canCoyoteJump = value;
             }
         }
     }
@@ -133,7 +148,6 @@ public class PlayerBase : MonoBehaviour
 
     #endregion
 
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -151,10 +165,18 @@ public class PlayerBase : MonoBehaviour
         // 대쉬 시 velocity를 고정하여 적용, 대쉬 끝나기 전까지 다른 움직임 차단
         if (playerDash.IsDashing)
         {
+            endDash = true;
             rb.velocity = playerDash.DashVector;
             return;
         }
+        else if (playerDash.IsUpDash && endDash)
+        {
+            endDash = false;
+            rb.velocity = Vector2.zero;
+            return;
+        }
 
+        FinalVector += playerCollision.GetGroundVector();
         // 플레이어가 벽을 잡고 있으면 매달리기와 벽점프에 대한 벡터만 적용
         if (isWallClimbing)
         {
@@ -174,7 +196,6 @@ public class PlayerBase : MonoBehaviour
                 FinalVector += horizontalMove.GetMoveVector();
             }
 
-            FinalVector += playerCollision.GetGroundVector();
             FinalVector += playerJump.GetJumpVector();
             FinalVector += playerJump.GetGravityVector();
         }
