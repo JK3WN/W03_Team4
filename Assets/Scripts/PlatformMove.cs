@@ -62,9 +62,31 @@ public class PlatformMove : MonoBehaviour
         // YJK, isTouched가 참이면 이 스프라이트를 반투명하게 만듦
         if (isTouched)
         {
-            Color color = GetComponent<SpriteRenderer>().color;
-            color.a = 0.5f;
-            GetComponent<SpriteRenderer>().color = color;
+            Color color;
+            if (GetComponent<SpriteRenderer>() != null)
+            {
+                color = GetComponent<SpriteRenderer>().color;
+                color.a = 0.5f;
+                GetComponent<SpriteRenderer>().color = color;
+            }
+            foreach (Transform t in transform)
+            {
+                if (t.gameObject.CompareTag("Platform") && t.GetComponent<SpriteRenderer>() != null)
+                {
+                    color = t.GetComponent<SpriteRenderer>().color;
+                    color.a = 0.5f;
+                    t.GetComponent<SpriteRenderer>().color = color;
+                    foreach(Transform t2 in t.transform)
+                    {
+                        if(t2.gameObject.CompareTag("Platform") && t2.GetComponent<SpriteRenderer>() != null)
+                        {
+                            color = t2.GetComponent<SpriteRenderer>().color;
+                            color.a = 0.5f;
+                            t2.GetComponent<SpriteRenderer>().color = color;
+                        }
+                    }
+                }
+            }
         }
 
         // YJK, 시간에 따라 위치를 MoveSpeed만큼 이동
