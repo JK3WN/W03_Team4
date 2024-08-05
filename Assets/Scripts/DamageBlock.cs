@@ -54,7 +54,7 @@ public class DamageBlock : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Spike"))
         {
-            player.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.down * knockback;
+            player.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.up * knockback;
         }
     }
 }
