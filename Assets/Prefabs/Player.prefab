@@ -506,8 +506,8 @@ MonoBehaviour:
   jumpPower: 25
   wallJumpPowerVector: {x: 25, y: 20}
   wallJumpLerpFactor: 6
-  fallMultiplier: 2.5
-  lowJumpMultiplier: 2
+  fallMultiplier: 3.5
+  lowJumpMultiplier: 3
   jumpEndTime: 0.15
   wallJumpAbleTime: 0.17
   bufferResetTime: 0.15

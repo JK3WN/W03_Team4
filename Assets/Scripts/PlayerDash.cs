@@ -44,6 +44,7 @@ public class PlayerDash : MonoBehaviour
 
     private IEnumerator DoDash(Vector2 Direction)
     {
+        Camera.main.GetComponent<ScreenShake>().Shake();
         isDashing = true;
         canDash = false;
         dashVector = Direction * 32f;
