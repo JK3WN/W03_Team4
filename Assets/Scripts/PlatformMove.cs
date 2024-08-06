@@ -22,6 +22,7 @@ public class PlatformMove : MonoBehaviour
     [Header("Current Status")]
     public int HP;
     public bool isTouched = false;
+    [SerializeField] private bool canSpriteTransparent = true;
 
     private Rigidbody2D rb;
 
@@ -60,7 +61,7 @@ public class PlatformMove : MonoBehaviour
         }
 
         // YJK, isTouched가 참이면 이 스프라이트를 반투명하게 만듦
-        if (isTouched)
+        if (isTouched && canSpriteTransparent)
         {
             Color color;
             if (GetComponent<SpriteRenderer>() != null)
@@ -120,7 +121,8 @@ public class PlatformMove : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") && !isTouched)
         {
             isTouched = true;
-            GameObject.Find("GameManager").GetComponent<GameManager>().CurrentExp += Exp;
+            if (Exp != 0)
+                GameObject.Find("GameManager").GetComponent<GameManager>().CurrentExp += Exp;
         }
     }
 }
