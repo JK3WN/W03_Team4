@@ -311,7 +311,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 1.8}
+  m_Size: {x: 0.8, y: 1.8}
   m_EdgeRadius: 0
 --- !u!114 &6010834541015190118
 MonoBehaviour:
@@ -509,7 +509,7 @@ MonoBehaviour:
   fallMultiplier: 2.5
   lowJumpMultiplier: 2
   jumpEndTime: 0.15
-  wallJumpAbleTime: 0.1
+  wallJumpAbleTime: 0.17
   bufferResetTime: 0.15
   coyoteTime: 0.15
   gravityVector: {x: 0, y: 0}
@@ -537,10 +537,10 @@ MonoBehaviour:
   onWall: 0
   onRightWall: 0
   onLeftWall: 0
-  collisionRadius: 0.38
-  bottomOffset: {x: 0, y: -0.72}
-  rightOffset: {x: 0.36, y: 0}
-  leftOffset: {x: -0.36, y: 0}
+  collisionRadius: 0.25
+  bottomOffset: {x: 0, y: -0.82}
+  rightOffset: {x: 0.4, y: 0}
+  leftOffset: {x: -0.4, y: 0}
   vectorLerpFactor: 1.1
   GroundVector: {x: 0, y: 0}
 --- !u!114 &4952898555926527328
