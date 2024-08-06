@@ -48,4 +48,9 @@ public class MenuManager : MonoBehaviour
         MainMenuPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(_mainMenuFirst);
     }
+
+    public void TutorialPressed()
+    {
+        SceneManager.LoadScene(3);
+    }
 }
