@@ -75,6 +75,7 @@ public class PlayerDash : MonoBehaviour
             // YJK, Dash가 1 이상일 때 Dash 1 줄이고 대쉬 진행
             if (inputVector == Vector2.zero || Dashes < 1f) return;
             Dashes -= 1f;
+            GameObject.Find("GameManager").GetComponent<GameManager>().RumblePulse(0.75f, 0.75f, 0.2f);
             StartCoroutine(DoDash(inputVector));
         }
 

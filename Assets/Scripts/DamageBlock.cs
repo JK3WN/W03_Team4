@@ -50,6 +50,7 @@ public class DamageBlock : MonoBehaviour
                     default:
                         break;
                 }
+                GameObject.Find("GameManager").GetComponent<GameManager>().RumblePulse(0.25f, 0.25f, 0.25f);
             }
         }
 
@@ -77,6 +78,7 @@ public class DamageBlock : MonoBehaviour
                 default:
                     break;
             }
+            GameObject.Find("GameManager").GetComponent<GameManager>().RumblePulse(0.25f, 0.25f, 0.25f);
         }
     }
 }
