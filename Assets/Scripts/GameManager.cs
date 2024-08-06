@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
 
     public TMPro.TextMeshProUGUI timerText, expText, recordText;
 
+    // YJK, 게임패드 진동 관련
+    private Gamepad pad;
+    private Coroutine stopRumbleCoroutine;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,5 +137,29 @@ public class GameManager : MonoBehaviour
     public void MainMenuPressed()
     {
         SceneManager.LoadScene(0);
+    }
+
+    // YJK, 게임패드 진동 시작
+    public void RumblePulse(float low, float high, float duration)
+    {
+        pad = Gamepad.current;
+        if (pad != null)
+        {
+            Debug.Log(pad);
+            pad.SetMotorSpeeds(low, high);
+            stopRumbleCoroutine = StartCoroutine(StopRumble(duration, pad));
+        }
+    }
+
+    // YJK, 게임패드 진동 끝(RumblePulse 돌리면 알아서 얘도 실행)
+    private IEnumerator StopRumble(float duration, Gamepad pad)
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        pad.SetMotorSpeeds(0f, 0f);
     }
 }
