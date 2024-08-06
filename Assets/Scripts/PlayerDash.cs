@@ -76,7 +76,7 @@ public class PlayerDash : MonoBehaviour
             if (inputVector == Vector2.zero || Dashes < 1f) return;
             Dashes -= 1f;
             if (GameObject.Find("GameManager") != null)
-            GameObject.Find("GameManager").GetComponent<GameManager>().RumblePulse(0.75f, 0.75f, 0.2f);
+                GameObject.Find("GameManager").GetComponent<GameManager>().RumblePulse(0.75f, 0.75f, 0.2f);
             StartCoroutine(DoDash(inputVector));
         }
 
